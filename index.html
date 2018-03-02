@@ -28,7 +28,6 @@
                 <legend hidden>Do you want to search for alcohol or non-alcoholic drinks?</legend>
                 <label for="with-alcohol">With alcohol</label>
                 <input id="with-alcohol" type="radio" name="alcohol" value="Alcoholic" checked="checked" />
-
                 <label for="without-alcohol">Without alcohol</label>
                 <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
             </fieldset>
@@ -53,9 +52,9 @@
             </figure>
 
             <h4>Ingredients</h4>
-            <p id="drink-ingredients">
+            <ul id="drink-ingredients" class="p-0">
                 <!-- the drinks ingredients are rendered here -->
-            </p>
+            </ul>
 
             <h4 class="mt-4">Instructions</h4>
             <p id="drink-instructions">
@@ -67,12 +66,13 @@
     <footer class="w-full h-32 bg-grey-light flex items-center justify-center">
         <div class="m-3">
             <img class="w-4" src="images/github-logo.png" alt="the github logo"/>
-            <a class="no-underline text-black" href="https://github.com/jdagmar/how-about-a-cocktail">GitHub repo</a>
+            <a class="no-underline text-black" target="_blank" rel="noopener" aria-label="link to github repo"
+            href="https://github.com/jdagmar/how-about-a-cocktail">jDagmar</a>
         </div>
     </footer>
 
     <script src="js/main.js"></script>
-    
+
 </body>
 
 </html>

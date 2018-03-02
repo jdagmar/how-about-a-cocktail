@@ -77,7 +77,7 @@ const displayDrink = (drinks) => {
             const measures = measureArray[i];
 
             drinkIngredients += `
-                <p>${measures} ${ingredient}</p>
+                <li class="list-reset mb-2">${measures} ${ingredient}</li>
             `;
 
         }
