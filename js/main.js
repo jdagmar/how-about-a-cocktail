@@ -1,6 +1,8 @@
 const input = document.getElementById('input');
 const searchForm = document.getElementById('search-form');
 
+const refreshButton = document.getElementById('refresh-button');
+
 const searchForDrink = (searchWord) => {
 
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
@@ -15,7 +17,7 @@ const searchForDrink = (searchWord) => {
         });
 }
 
-searchForm.addEventListener('submit', (event) =>{
+searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const searchValue = input.value;
     searchForDrink(searchValue);
@@ -39,9 +41,7 @@ const displayDrink = (drinks) => {
     for (const drink of drinks) {
 
         const drinkTitle = document.getElementById('drink-title');
-
         const drinkImageContainer = document.getElementById('drink-image-container');
-
         const drinkIngredientsContainer = document.getElementById('drink-ingredients');
 
         let drinkInfo = `
@@ -49,19 +49,21 @@ const displayDrink = (drinks) => {
             `;
 
         let drinkImage = `
-            <img src="${drink.strDrinkThumb}"/>
+            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
         `;
 
         let measureArray = [];
-
         let ingredientsArray = [];
-
         let drinksProperties = Object.keys(drink);
 
-        for (const drinkProperty of drinksProperties){
+        for (const drinkProperty of drinksProperties) {
             if (drinkProperty.includes('strIngredient')) {
-                ingredientsArray.push(drink[drinkProperty]);
+
+                if (drink[drinkProperty] !== null) {
+                    ingredientsArray.push(drink[drinkProperty]);
+                }
             }
+
             if (drinkProperty.includes('strMeasure')) {
                 measureArray.push(drink[drinkProperty]);
             }
@@ -87,17 +89,17 @@ const displayDrink = (drinks) => {
             `;
 
         drinkTitle.innerHTML = drinkInfo;
-
         drinkImageContainer.innerHTML = drinkImage;
-
         drinkIngredientsContainer.innerHTML = drinkIngredients;
-
         drinkInstructionsContainer.innerHTML = drinkInstructions;
     }
 
 }
 
-getRandomDrink();
+refreshButton.addEventListener('click', () => {
+    getRandomDrink();
+})
+
 
 
 
