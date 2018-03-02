@@ -7,48 +7,72 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:400,600|Roboto:400,400i,500" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet"/>
-    <title></title>
+    <link href="css/style.css" rel="stylesheet" />
+    <title>How about a cocktail?</title>
 </head>
 
 <body class="flex flex-wrap flex-col lg:flex-row justify-between">
+
     <header class="w-full h-16 bg-grey-light flex items-center p-2">
         <h1>How about a cocktail?</h1>
     </header>
-    <aside class="w-1/4 m-2 p-2 border-r border-solid">
+    
+    <aside class="w-full lg:w-1/4 m-2 p-2 border-r border-solid">
         <h2 class="m-2">Search by ingredient</h2>
         <p class="m-2">Search for a drink containing a specific liqour or perhaps banana?</p>
         <form id="search-form" class="m-2">
-            <input id="input" class="border border-solid" type="text" />
-            <input class="appearance-none border border-solid" type="submit" />
+            <label for="input" hidden>Search for drink ingredient</label>
+            <input id="input" class="border border-solid mb-2" type="text" />
+            <input class="appearance-none border border-solid w-24 mb-2" type="submit" value="Search" />
+            <fieldset>
+                <legend hidden>Do you want to search for alcohol or non-alcoholic drinks?</legend>
+                <label for="with-alcohol">With alcohol</label>
+                <input id="with-alcohol" type="radio" name="alcohol" value="Alcoholic" checked="checked" />
+
+                <label for="without-alcohol">Without alcohol</label>
+                <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
+            </fieldset>
         </form>
-
-        <nav>
-
-        </nav>
     </aside>
+
     <main class="max-w-md mr-auto">
         <div id="drink-div" class="m-4 font-sans">
-            <h3>How about a...</h3>
-            <h3 id="drink-title"></h3>
+            <div class="flex justify-center items-center">
+                <h3>How about a...</h3>
+                <button id="refresh-button" aria-label="click to get new random drink">
+                    <img src="images/refresh-icon.svg" alt="click to refresh"/>
+                </button>
+            </div>
+
+            <h3 id="drink-title" class="mb-2">
+                <!-- the drinks title is rendered here -->
+            </h3>
 
             <figure id="drink-image-container" class="w-32">
-
+                <!-- image of the drink is rendered here -->
             </figure>
 
             <h4>Ingredients</h4>
-            <p id="drink-ingredients"></p>
+            <p id="drink-ingredients">
+                <!-- the drinks ingredients are rendered here -->
+            </p>
 
-            <h4>Instructions</h4>
-            <p id="drink-instructions"></p>
+            <h4 class="mt-4">Instructions</h4>
+            <p id="drink-instructions">
+                <!-- instructions on how to make the drink is rendered here -->
+            </p>
         </div>
     </main>
 
-    <footer class="w-full h-32 bg-grey-light">
-
+    <footer class="w-full h-32 bg-grey-light flex items-center justify-center">
+        <div class="m-3">
+            <img class="w-4" src="images/github-logo.png" alt="the github logo"/>
+            <a class="no-underline text-black" href="https://github.com/jdagmar/how-about-a-cocktail">GitHub repo</a>
+        </div>
     </footer>
 
     <script src="js/main.js"></script>
+    
 </body>
 
 </html>
