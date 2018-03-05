@@ -55,9 +55,10 @@ const getRandomDrink = () => {
 
 const displayDrink = (drinks, type) => {
 
-    console.log('clearing list');
-    drinkList.innerHTML = '';
-
+    if (type === 'list'){
+        drinkList.innerHTML = '';
+    }
+    
     for (const drink of drinks) {
 
         // display when random drink
@@ -66,9 +67,9 @@ const displayDrink = (drinks, type) => {
             mainView.classList.add('hidden');
             singleView.classList.remove('hidden');
 
-            const drinkTitle = document.getElementById('drink-title');
-            const drinkImageContainer = document.getElementById('drink-image-container');
-            const drinkIngredientsContainer = document.getElementById('drink-ingredients');
+            const drinkTitle = singleView.querySelector('#drink-title');
+            const drinkImageContainer = singleView.querySelector('#drink-image-container');
+            const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
 
             let drinkInfo = `
                 <p>${drink.strDrink}</p>
@@ -108,7 +109,7 @@ const displayDrink = (drinks, type) => {
 
             }
 
-            const drinkInstructionsContainer = document.getElementById('drink-instructions');
+            const drinkInstructionsContainer = singleView.querySelector('#drink-instructions');
 
             let drinkInstructions = `
                 <p>${drink.strInstructions}</p>
