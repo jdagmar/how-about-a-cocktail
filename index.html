@@ -16,15 +16,15 @@
     <header class="w-full h-16 bg-grey-light flex items-center p-2">
         <h1>How about a cocktail?</h1>
     </header>
-    
-    <aside class="w-full lg:w-1/4 m-2 p-2 border-r border-solid">
-        <h2 class="m-2">Search by ingredient</h2>
-        <p class="m-2">Search for a drink containing a specific liqour or perhaps banana?</p>
-        <form id="search-form" class="m-2">
+
+    <aside class="w-full lg:w-1/4 p-2 m-0 lg:m-2 border-b lg:border-r lg:border-b-0 border-solid p-6">
+        <h2 class="mb-2">Search by ingredient</h2>
+        <p class="mb-2">Search for a drink containing a specific liqour or perhaps banana?</p>
+        <form id="search-form">
             <label for="input" hidden>Search for drink ingredient</label>
-            <input id="input" class="border border-solid mb-2" type="text" />
-            <input class="appearance-none border border-solid w-24 mb-2" type="submit" value="Search" />
-            <fieldset class="mt-2">
+            <input id="input" class="w-full lg:w-auto border border-solid mb-2 p-1" type="text" />
+            <input class="appearance-none border border-solid w-full lg:w-auto mb-2 p-1" type="submit" value="Search" />
+            <fieldset class="mb-4">
                 <legend hidden>Do you want to search for alcohol or non-alcoholic drinks?</legend>
                 <label for="with-alcohol">With alcohol</label>
                 <input id="with-alcohol" class="mr-8" type="radio" name="alcohol" value="Alcoholic" checked="checked" />
@@ -32,42 +32,50 @@
                 <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
             </fieldset>
         </form>
+
+        <button id="refresh-button" class="flex justify-center items-center border border-solid w-full lg:w-auto p-1" aria-label="click to get a random drink">
+            Generate random recipe
+            <img src="images/refresh-icon.svg" alt="click to refresh" />
+        </button>
     </aside>
 
     <main class="max-w-md mr-auto">
-        <div id="drink-div" class="m-4 font-sans">
-            <div class="flex justify-center items-center">
-                <h3>How about a...</h3>
-                <button id="refresh-button" aria-label="click to get new random drink">
-                    <img src="images/refresh-icon.svg" alt="click to refresh"/>
-                </button>
+
+        <div id="random-drink" class="m-4">
+            <h3>How about a...</h3>
+        </div>
+
+        <div id="search-result-header" class="m-4">
+
+        </div>
+
+        <div id="drink-list">
+            <div id="drink-div" class="m-4">
+                <h3 id="drink-title" class="mb-2 drink-title">
+                    <!-- the drinks title is rendered here -->
+                </h3>
+
+                <figure id="drink-image-container" class="w-32">
+                    <!-- image of the drink is rendered here -->
+                </figure>
+
+                <h4>Ingredients</h4>
+                <ul id="drink-ingredients" class="p-0">
+                    <!-- the drinks ingredients are rendered here -->
+                </ul>
+
+                <h4 class="mt-4">Instructions</h4>
+                <p id="drink-instructions">
+                    <!-- instructions on how to make the drink is rendered here -->
+                </p>
             </div>
-
-            <h3 id="drink-title" class="mb-2">
-                <!-- the drinks title is rendered here -->
-            </h3>
-
-            <figure id="drink-image-container" class="w-32">
-                <!-- image of the drink is rendered here -->
-            </figure>
-
-            <h4>Ingredients</h4>
-            <ul id="drink-ingredients" class="p-0">
-                <!-- the drinks ingredients are rendered here -->
-            </ul>
-
-            <h4 class="mt-4">Instructions</h4>
-            <p id="drink-instructions">
-                <!-- instructions on how to make the drink is rendered here -->
-            </p>
         </div>
     </main>
 
     <footer class="w-full h-32 bg-grey-light flex items-center justify-center">
         <div class="m-3">
-            <img class="w-4" src="images/github-logo.png" alt="the github logo"/>
-            <a class="no-underline text-black" target="_blank" rel="noopener" aria-label="link to github repo"
-            href="https://github.com/jdagmar/how-about-a-cocktail">jDagmar</a>
+            <img class="w-4" src="images/github-logo.png" alt="the github logo" />
+            <a class="no-underline text-black" target="_blank" rel="noopener" aria-label="link to github repo" href="https://github.com/jdagmar/how-about-a-cocktail">jDagmar</a>
         </div>
     </footer>
 
