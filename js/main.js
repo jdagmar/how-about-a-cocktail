@@ -3,10 +3,10 @@ const searchForm = document.getElementById('search-form');
 const drinkContainer = document.getElementById('drink-div');
 const drinkList = document.getElementById('drink-list');
 
-const randomDrink = document.getElementById('random-drink');
-const searchResultHeader = document.getElementById('search-result-header');
+const contentDescription = document.getElementById('content-description');
 
 const refreshButton = document.getElementById('refresh-button');
+
 
 const searchForDrink = (searchWord) => {
 
@@ -64,6 +64,9 @@ const displayDrink = (drinks, type) => {
 
         // display when random drink
         if (type === 'single') {
+
+            contentDescription.innerText = 'How about a...';
+
             let drinkInfo = `
                 <p>${drink.strDrink}</p>
             `;
@@ -117,9 +120,7 @@ const displayDrink = (drinks, type) => {
         // display when search
         if (type === 'list') {
 
-            randomDrink.style.display = 'none';
-        
-            searchResultHeader.innerText = `Search result(s) for ${input.value}:`;
+            contentDescription.innerText = `Search result(s) for ${input.value}:`;
 
             const searchResult = drinkContainer.cloneNode(true);
 
