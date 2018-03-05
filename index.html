@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 
 <head>
     <meta charset="UTF-8">
@@ -11,43 +11,78 @@
     <title>How about a cocktail?</title>
 </head>
 
-<body class="flex flex-wrap flex-col lg:flex-row justify-between">
+<body class="flex flex-col h-full">
 
-    <header class="w-full h-16 bg-grey-light flex items-center p-2">
+    <header class="w-full h-16 bg-indigo-darker text-white flex items-center p-2 flex-none">
         <h1>How about a cocktail?</h1>
     </header>
 
-    <aside class="w-full lg:w-1/4 p-2 m-0 lg:m-2 border-b lg:border-r lg:border-b-0 border-solid p-6">
-        <h2 class="mb-2">Search by ingredient</h2>
-        <p class="mb-2">Search for a drink containing a specific liqour or perhaps banana?</p>
-        <form id="search-form">
-            <label for="input" hidden>Search for drink ingredient</label>
-            <input id="input" class="w-full lg:w-auto border border-solid mb-2 p-1" type="text" />
-            <input class="appearance-none border border-solid w-full lg:w-auto mb-2 p-1" type="submit" value="Search" />
-            <fieldset class="mb-4">
-                <legend hidden>Do you want to search for alcohol or non-alcoholic drinks?</legend>
-                <label for="with-alcohol">With alcohol</label>
-                <input id="with-alcohol" class="mr-8" type="radio" name="alcohol" value="Alcoholic" checked="checked" />
-                <label for="without-alcohol">Without alcohol</label>
-                <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
-            </fieldset>
-        </form>
+    <div class="flex flex-col lg:flex-row h-full overflow-hidden">
+        <aside class="w-full lg:w-2/5 p-2 m-0 lg:m-2 border-b lg:border-r lg:border-b-0 border-solid p-6">
+            <h2 class="mb-2">Search by ingredient</h2>
+            <p class="mb-2">Search for a drink containing a specific liqour or perhaps banana?</p>
+            <form id="search-form">
 
-        <button id="refresh-button" class="flex justify-center items-center border border-solid w-full lg:w-auto p-1" aria-label="click to get a random drink">
-            Generate random recipe
-            <img src="images/refresh-icon.svg" alt="click to refresh" />
-        </button>
-    </aside>
+                <div class="flex flex-col lg:flex-row">
+                    <label for="input" hidden>Search for drink ingredient</label>
+                    <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1" type="text" />
+                    <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-1 hover:bg-indigo-darker hover:text-white hover:border-indigo-darker"
+                        type="submit" value="Search" />
+                </div>
 
-    <main class="max-w-md mr-auto">
+                <fieldset class="mb-4">
+                    <legend hidden>Do you want to search for alcohol or non-alcoholic drinks?</legend>
+                    <label for="with-alcohol">With alcohol</label>
+                    <input id="with-alcohol" class="mr-8" type="radio" name="alcohol" value="Alcoholic" checked="checked" />
+                    <label for="without-alcohol">Without alcohol</label>
+                    <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
+                </fieldset>
+            </form>
 
-        <h3 id="content-description" class="m-4">
-            <!-- describes the content currently showing, ie 'search result for...'
-            or 'how about a...' when generating a random drink -->
-        </h3>
+            <button id="refresh-button" class="flex justify-center items-center border border-solid w-full mt-8 p-1 hover:bg-indigo-darker hover:text-white hover:border-indigo-darker"
+                aria-label="click to get a random drink">
+                Generate random recipe
+                <img src="images/refresh-icon.svg" alt="click to refresh" />
+            </button>
+        </aside>
 
-        <div id="drink-list">
-            <div id="drink-div" class="m-4">
+        <main class="overflow-auto w-full">
+            <div id="main-view" class="max-w-xl">
+                <h3 id="content-description" class="m-4">
+                    <!-- describes the content currently showing, ie 'search result for...'
+                    or 'how about a...' when generating a random drink -->
+                </h3>
+
+                <div id="drink-list" class="flex flex-col lg:flex-row flex-wrap">
+                    <div id="drink-div" class="m-4 w-32">
+
+                        <figure id="drink-image-container" class="w-32">
+                            <!-- image of the drink is rendered here -->
+                        </figure>
+
+                        <h3 id="drink-title" class="mb-2 drink-title">
+                            <!-- the drinks title is rendered here -->
+                        </h3>
+
+                        <h4></h4>
+                        <ul id="drink-ingredients" class="p-0">
+                            <!-- the drinks ingredients are rendered here -->
+                        </ul>
+
+                        <h4 class="mt-4"></h4>
+                        <p id="drink-instructions">
+                            <!-- instructions on how to make the drink is rendered here -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="single-view" class="max-w-md mr-auto m-4 hidden">
+
+                <button id="back-to-search-results" class="flex justify-center items-center border border-solid p-2 mb-4">
+                    <img src="images/arrow-icon.svg" alt="" /> Back to list
+                </button>
+
                 <h3 id="drink-title" class="mb-2 drink-title">
                     <!-- the drinks title is rendered here -->
                 </h3>
@@ -65,11 +100,13 @@
                 <p id="drink-instructions">
                     <!-- instructions on how to make the drink is rendered here -->
                 </p>
-            </div>
-        </div>
-    </main>
 
-    <footer class="w-full h-32 bg-grey-light flex items-center justify-center">
+            </div>
+
+        </main>
+    </div>
+
+    <footer class="w-full  bg-grey flex items-center justify-center flex-none">
         <div class="m-3">
             <img class="w-4" src="images/github-logo.png" alt="the github logo" />
             <a class="no-underline text-black" target="_blank" rel="noopener" aria-label="link to github repo" href="https://github.com/jdagmar/how-about-a-cocktail">jDagmar</a>

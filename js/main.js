@@ -3,26 +3,22 @@ const searchForm = document.getElementById('search-form');
 const drinkContainer = document.getElementById('drink-div');
 const drinkList = document.getElementById('drink-list');
 
+const backToSearchResults = document.getElementById('back-to-search-results');
+
 const contentDescription = document.getElementById('content-description');
+
+const mainView = document.getElementById('main-view');
+const singleView = document.getElementById('single-view');
 
 const refreshButton = document.getElementById('refresh-button');
 
-
 const searchForDrink = (searchWord) => {
-
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
-
-            // let drinkId = [];
-
-            // for (drink of drinks) {
-            //     drinkId += drink;
-            // }
-
-            // searchForDrinkIngredients(drinkId);
-
+            mainView.classList.remove('hidden');
+            singleView.classList.add('hidden');
             displayDrink(data.drinks, 'list');
         })
         .catch((error) => {
@@ -30,16 +26,17 @@ const searchForDrink = (searchWord) => {
         });
 }
 
-// const searchForDrinkIngredients = (id) => {
-//     fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
-//         .then((response) => response.json())
-//         .then((data) => {
-
-//         })
-//         .catch((error) => {
-//             console.log('error', error)
-//         });
-// }
+const searchForDrinkIngredients = (id) => {
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+            displayDrink(data.drinks, 'single');
+            console.log('bajs');
+        })
+        .catch((error) => {
+            console.log('error', error)
+        });
+}
 
 const getRandomDrink = () => {
     fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
@@ -54,18 +51,24 @@ const getRandomDrink = () => {
         });
 }
 
+// contentDescription.innerText = 'How about a...';
+
 const displayDrink = (drinks, type) => {
 
-    for (const drink of drinks) {
+    console.log('clearing list');
+    drinkList.innerHTML = '';
 
-        const drinkTitle = document.getElementById('drink-title');
-        const drinkImageContainer = document.getElementById('drink-image-container');
-        const drinkIngredientsContainer = document.getElementById('drink-ingredients');
+    for (const drink of drinks) {
 
         // display when random drink
         if (type === 'single') {
 
-            contentDescription.innerText = 'How about a...';
+            mainView.classList.add('hidden');
+            singleView.classList.remove('hidden');
+
+            const drinkTitle = document.getElementById('drink-title');
+            const drinkImageContainer = document.getElementById('drink-image-container');
+            const drinkIngredientsContainer = document.getElementById('drink-ingredients');
 
             let drinkInfo = `
                 <p>${drink.strDrink}</p>
@@ -123,13 +126,18 @@ const displayDrink = (drinks, type) => {
             contentDescription.innerText = `Search result(s) for ${input.value}:`;
 
             const searchResult = drinkContainer.cloneNode(true);
+            const imageContainerItem = searchResult.querySelector('#drink-image-container');
+            const drinkId = drink.idDrink;
+
+            searchResult.addEventListener('click', () => {
+                searchForDrinkIngredients(drinkId);
+            });
+
+            let drinkImageList = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
+            imageContainerItem.innerHTML = drinkImageList;
 
             const searchResultTitle = searchResult.querySelector('.drink-title');
             searchResultTitle.innerText = drink.strDrink;
-
-            let drinkImageList = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
-
-            drinkImageContainer.innerHTML = drinkImageList;
 
             drinkList.appendChild(searchResult);
 
@@ -137,6 +145,11 @@ const displayDrink = (drinks, type) => {
 
     }
 
+}
+
+const goBackToSearchResults = () => {
+    singleView.classList.add('hidden');
+    mainView.classList.remove('hidden');
 }
 
 searchForm.addEventListener('submit', (event) => {
@@ -148,3 +161,7 @@ searchForm.addEventListener('submit', (event) => {
 refreshButton.addEventListener('click', () => {
     getRandomDrink();
 });
+
+backToSearchResults.addEventListener('click', () => {
+    goBackToSearchResults();
+})
