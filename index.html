@@ -18,31 +18,29 @@
     </header>
 
     <div class="flex flex-col lg:flex-row h-full overflow-hidden flex-1">
-        <aside class="w-full lg:w-2/5 p-2 m-0 lg:m-2 border-b lg:border-r lg:border-b-0 border-solid p-6">
-            <h2 class="mb-2">Search by ingredient</h2>
-            <p class="mb-2">Search for a drink containing a specific liqour or perhaps banana?</p>
-            <form id="search-form">
+        <aside class="flex flex-col justify-between w-full lg:w-2/5 p-2 m-0 lg:m-2 border-b lg:border-r lg:border-b-0 border-solid p-6">
+            <div>
+                <h2 class="mb-2">Search by ingredient</h2>
+                <p class="mb-2">Search for a drink containing a specific liqour or other ingredient.</p>
+                <form id="search-form">
+                    <div class="flex flex-col lg:flex-row">
+                        <label for="input" hidden>Search for drink ingredient</label>
+                        <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1 rounded" type="text" placeholder="e.g. gin or banana"/>
+                        <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-1 hover:border-grey-darker rounded" type="submit" value="Search" />
+                    </div>
 
-                <div class="flex flex-col lg:flex-row">
-                    <label for="input" hidden>Search for drink ingredient</label>
-                    <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1" type="text" />
-                    <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-1 hover:bg-indigo-darker hover:text-white hover:border-indigo-darker"
-                        type="submit" value="Search" />
-                </div>
+                    <fieldset class="mb-4 mt-2">
+                        <legend class="mb-2">Filter search results by alcohol</legend>
+                        <label for="with-alcohol">With alcohol</label>
+                        <input id="with-alcohol" class="mr-8" type="radio" name="alcohol" value="Alcoholic" />
+                        <label for="without-alcohol">Without alcohol</label>
+                        <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
+                    </fieldset>
+                </form>
+            </div>
 
-                <fieldset class="mb-4">
-                    <legend hidden>Do you want to search for alcohol or non-alcoholic drinks?</legend>
-                    <label for="with-alcohol">With alcohol</label>
-                    <input id="with-alcohol" class="mr-8" type="radio" name="alcohol" value="Alcoholic" checked="checked" />
-                    <label for="without-alcohol">Without alcohol</label>
-                    <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
-                </fieldset>
-            </form>
-
-            <button id="refresh-button" class="flex justify-center items-center border border-solid w-full mt-8 p-1 hover:bg-indigo-darker hover:text-white hover:border-indigo-darker"
-                aria-label="click to get a random drink">
+            <button id="refresh-button" class="flex justify-center items-center border border-solid w-full mt-8 p-3 hover:border-grey-darker rounded" aria-label="click to get a random drink">
                 Generate random recipe
-                <img src="images/refresh-icon.svg" alt="click to refresh" />
             </button>
         </aside>
 
@@ -53,9 +51,9 @@
                     or 'how about a...' when generating a random drink -->
                 </h3>
 
-                <div id="drink-list" class="flex flex-col lg:flex-row flex-wrap">
-                    <div id="drink-div" class="m-4 w-32">
-                        <figure id="drink-image-container" class="w-32">
+                <div id="drink-list" class="flex flex-col md:flex-row flex-wrap">
+                    <div id="drink-div" class="m-4 md:w-32">
+                        <figure id="drink-image-container" class="w-full md:w-32">
                             <!-- image of the drink is rendered here -->
                         </figure>
 
@@ -66,30 +64,29 @@
                 </div>
             </div>
 
-            <div id="single-view" class="max-w-md mr-auto m-4 hidden">
-                <button id="back-to-search-results" class="flex justify-center items-center border border-solid p-2 mb-4">
-                    <img src="images/arrow-icon.svg" alt="" /> Back to list
+            <div id="single-view" class="max-w-lg m-4 hidden">
+                <button id="back-to-search-results" class="flex justify-center items-center border border-solid p-3 pr-6 mb-4 hover:border-grey-darker rounded">
+                    <img class="hover:white" src="images/chevron-icon.svg" alt="click to go back to list" /> Back to list
                 </button>
 
                 <h3 id="drink-title" class="mb-2 drink-title">
                     <!-- the drinks title is rendered here -->
                 </h3>
 
-                <figure id="drink-image-container" class="w-48">
+                <figure id="drink-image-container" class="w-full md:w-2/5">
                     <!-- image of the drink is rendered here -->
                 </figure>
 
-                <h4>Ingredients</h4>
+                <h4 class="mt-2">You'll need:</h4>
                 <ul id="drink-ingredients" class="p-0">
                     <!-- the drinks ingredients are rendered here -->
                 </ul>
 
-                <h4 class="mt-4">Instructions</h4>
+                <h4 class="mt-4">This is how it's done:</h4>
                 <p id="drink-instructions">
                     <!-- instructions on how to make the drink is rendered here -->
                 </p>
             </div>
-
         </main>
     </div>
 
