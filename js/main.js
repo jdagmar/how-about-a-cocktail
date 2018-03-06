@@ -31,10 +31,9 @@ const searchForDrinkIngredients = (id) => {
         .then((response) => response.json())
         .then((data) => {
             displayDrink(data.drinks, 'single');
-            console.log('bajs');
         })
         .catch((error) => {
-            console.log('error', error)
+            console.log('could not find any ingredients/instructions')
         });
 }
 
