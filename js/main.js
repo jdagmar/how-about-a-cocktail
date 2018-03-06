@@ -1,28 +1,33 @@
 const input = document.getElementById('input');
 const searchForm = document.getElementById('search-form');
+
 const drinkContainer = document.getElementById('drink-div');
 const drinkList = document.getElementById('drink-list');
 
 const backToSearchResults = document.getElementById('back-to-search-results');
+const refreshButton = document.getElementById('refresh-button');
 
 const contentDescription = document.getElementById('content-description');
 
 const mainView = document.getElementById('main-view');
 const singleView = document.getElementById('single-view');
 
-const refreshButton = document.getElementById('refresh-button');
-
 const searchForDrink = (searchWord) => {
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
+
+            // https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic
+
+            // displaying
             mainView.classList.remove('hidden');
             singleView.classList.add('hidden');
             displayDrink(data.drinks, 'list');
         })
         .catch((error) => {
-            console.log('sorry no result');
+            contentDescription.innerText = `
+                We're sorry but we couldn't find a drink containing '${input.value}'.
+            `;
         });
 }
 
@@ -33,7 +38,10 @@ const searchForDrinkIngredients = (id) => {
             displayDrink(data.drinks, 'single');
         })
         .catch((error) => {
-            console.log('could not find any ingredients/instructions')
+            contentDescription.innerText = `
+                Seems like something went wrong, we couldn't find the recipe
+                for ${data.drinks.strDrink}.
+            `;
         });
 }
 
@@ -41,23 +49,21 @@ const getRandomDrink = () => {
     fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
             displayDrink(data.drinks, 'single');
-
         })
         .catch((error) => {
-            console.log('couldnt find any recipe');
+            contentDescription.innerText = `
+                We're sorry, no recipe is aviable right now.
+            `;
         });
 }
 
-// contentDescription.innerText = 'How about a...';
-
 const displayDrink = (drinks, type) => {
 
-    if (type === 'list'){
+    if (type === 'list') {
         drinkList.innerHTML = '';
     }
-    
+
     for (const drink of drinks) {
 
         // display when random drink
@@ -70,13 +76,11 @@ const displayDrink = (drinks, type) => {
             const drinkImageContainer = singleView.querySelector('#drink-image-container');
             const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
 
-            let drinkInfo = `
-                <p>${drink.strDrink}</p>
-            `;
+            let drinkInfo = drink.strDrink;
 
             let drinkImage = `
-            <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
-        `;
+                <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
+            `;
 
             let measureArray = [];
             let ingredientsArray = [];
@@ -103,16 +107,14 @@ const displayDrink = (drinks, type) => {
                 const measures = measureArray[i];
 
                 drinkIngredients += `
-                <li class="list-reset mb-2">${measures} ${ingredient}</li>
-            `;
+                    <li class="list-reset mb-2">${measures} ${ingredient}</li>
+                `;
 
             }
 
             const drinkInstructionsContainer = singleView.querySelector('#drink-instructions');
 
-            let drinkInstructions = `
-                <p>${drink.strInstructions}</p>
-            `;
+            let drinkInstructions = drink.strInstructions;
 
             drinkTitle.innerHTML = drinkInfo;
             drinkImageContainer.innerHTML = drinkImage;
@@ -123,7 +125,7 @@ const displayDrink = (drinks, type) => {
         // display when search
         if (type === 'list') {
 
-            contentDescription.innerText = `Search result(s) for ${input.value}:`;
+            contentDescription.innerText = `Search result(s) for '${input.value}':`;
 
             const searchResult = drinkContainer.cloneNode(true);
             const imageContainerItem = searchResult.querySelector('#drink-image-container');
@@ -133,7 +135,10 @@ const displayDrink = (drinks, type) => {
                 searchForDrinkIngredients(drinkId);
             });
 
-            let drinkImageList = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
+            let drinkImageList = `
+                <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
+            `;
+
             imageContainerItem.innerHTML = drinkImageList;
 
             const searchResultTitle = searchResult.querySelector('.drink-title');
