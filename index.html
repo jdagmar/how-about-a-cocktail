@@ -13,8 +13,10 @@
 
 <body class="flex flex-col min-h-full lg:h-full">
 
-    <header class="w-full h-16 bg-indigo-darker text-white flex items-center p-2 flex-none">
-        <h1>How about a cocktail?</h1>
+    <header class="w-full h-16 bg-indigo-darker flex items-center p-2 flex-none">
+        <h1>
+            <a href="index.html" class="text-white no-underline">How about a cocktail?</a>
+        </h1>
     </header>
 
     <div class="flex flex-col lg:flex-row h-full overflow-hidden flex-1">
@@ -25,19 +27,22 @@
                 <form id="search-form">
                     <div class="flex flex-col lg:flex-row">
                         <label for="input" hidden>Search for drink ingredient</label>
-                        <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1 hover:border-grey-darker rounded" type="text" placeholder="e.g. gin or banana"/>
-                        <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-1 hover:border-grey-darker rounded" type="submit" value="Search" />
+                        <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1 hover:border-grey-darker rounded" type="text"
+                            placeholder="e.g. gin or banana" />
+                        <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-1 hover:border-grey-darker rounded" type="submit"
+                            value="Search" />
                     </div>
 
                     <fieldset class="mb-4 mt-2">
-                        <legend hidden class="mb-2">Filter search to exclude alcohol</legend>
-                        <label for="without-alcohol">Show only non alcohol drinks</label>
+                        <legend hidden class="mb-2">Filter search to exclude alcoholic drinks</legend>
+                        <label for="without-alcohol">Show only non alcoholic drinks</label>
                         <input id="without-alcohol" type="checkbox" name="alcohol" value="Non_Alcoholic" />
                     </fieldset>
                 </form>
             </div>
 
-            <button id="refresh-button" class="flex justify-center items-center border border-solid w-full mt-8 p-3 hover:border-grey-darker rounded" aria-label="click to get a random drink">
+            <button id="refresh-button" class="flex justify-center items-center border border-solid w-full mt-8 p-3 hover:border-grey-darker rounded"
+                aria-label="click to get a random drink">
                 Generate random recipe
             </button>
         </aside>
@@ -50,19 +55,19 @@
                 </h3>
 
                 <div id="drink-list" class="flex flex-col md:flex-row flex-wrap">
-                    <div id="drink-div" class="m-4 md:w-32">
-                        <figure id="drink-image-container" class="w-full md:w-32">
+                    <div id="drink-div" class="m-4 md:w-32 cursor-pointer">
+                        <figure id="drink-image-container" class="w-full md:w-32 md:h-32">
                             <!-- image of the drink is rendered here -->
                         </figure>
 
-                        <h3 id="drink-title" class="mb-2 drink-title">
+                        <h3 id="drink-title" class="mb-2 mt-2 drink-title">
                             <!-- the drinks title is rendered here -->
                         </h3>
                     </div>
                 </div>
             </div>
 
-            <div id="single-view" class="max-w-lg m-4 hidden">
+            <div id="single-view" class="max-w-md m-4 hidden">
                 <button id="back-to-search-results" class="flex justify-center items-center border border-solid p-3 pr-6 mb-4 hover:border-grey-darker rounded">
                     <img class="hover:white" src="images/chevron-icon.svg" alt="click to go back to list" /> Back to list
                 </button>
@@ -71,17 +76,23 @@
                     <!-- the drinks title is rendered here -->
                 </h3>
 
-                <figure id="drink-image-container" class="w-full md:w-2/5">
-                    <!-- image of the drink is rendered here -->
-                </figure>
+                <div class="flex">
+                    <div class="w-30">
+                        <figure id="drink-image-container" class="w-full min-height-48">
+                            <!-- image of the drink is rendered here -->
+                        </figure>
+                    </div>
 
-                <h4 class="mt-2">You'll need:</h4>
-                <ul id="drink-ingredients" class="p-0">
-                    <!-- the drinks ingredients are rendered here -->
-                </ul>
+                    <div class="w-full ml-4">
+                        <h4 class="mb-2">You'll need:</h4>
+                        <ul id="drink-ingredients" class="p-0">
+                            <!-- the drinks ingredients are rendered here -->
+                        </ul>
+                    </div>
+                </div>
 
                 <h4 class="mt-4">This is how it's done:</h4>
-                <p id="drink-instructions">
+                <p id="drink-instructions" class="max-w-30">
                     <!-- instructions on how to make the drink is rendered here -->
                 </p>
             </div>

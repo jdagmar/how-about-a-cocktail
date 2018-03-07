@@ -5,3 +5,15 @@ h1, h2, h3, h4 {
 p, input {
     font-family: 'Roboto', sans-serif;
 }
+
+.min-height-48 {
+    min-height: 10rem;
+}
+
+.max-w-30 {
+    max-width: 30rem;
+}
+
+.w-30 {
+    width: 30rem;
+}
