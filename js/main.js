@@ -12,6 +12,8 @@ const contentDescription = document.getElementById('content-description');
 const mainView = document.getElementById('main-view');
 const singleView = document.getElementById('single-view');
 
+const checkbox = document.getElementById('without-alcohol');
+
 const toggleView = (view) => {
 
     if (view === 'main') {
@@ -26,46 +28,44 @@ const toggleView = (view) => {
 
 }
 
-// radiobuttons
-const radioButtons = document.querySelector('alcohol');
-
-// the value of the radio goes here
-const radioButtonValue = '';
-
 const searchForDrink = (searchWord) => {
 
-    // first take the value from the inputfield
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
-        .then((response) => response.json())
-        .then((data) => {
+    const fetchNonAlcoholicList = fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic`)
+        .then((response) => response.json());
 
-            // check if the radio buttons is checked
-            // for (const i = 0; i < radioButtons.length; i++) {
-            //     if (radioButtons[i].checked) {
-            //         radioButtonValue = radioButtons;
-            //         break;
-            //     }
-            // }
+    const fetchDrinkBySearchword = fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
+        .then((response) => response.json());
 
-            // if one is checked, make another fetch
-            // if (radioButtonValue.checked) {
+    Promise.all([fetchNonAlcoholicList, fetchDrinkBySearchword])
 
-            //     const filterByAlcohol = (radioButtonValue) => {
-            //         fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${alcohol}`)
-            //             .then((response) => response.json())
-            //             .then((data) => {
+        .then((result) => {
+            const data = result[1];
+            const nonAlcholicData = result[0];
 
-            //                 /* then we should match the drink ids from the first
-            //                     fetch with the matching id in the second fetch */
+            let nonAlcoholicDrinkIds = [];
 
-            //             })
-            //     }
+            for (const drink of nonAlcholicData.drinks) {
+                nonAlcoholicDrinkIds.push(drink.idDrink);
+            }
 
-            // }
+            const filtered = [];
 
-            // display search result
+            for (const drink of data.drinks) {
+                if ((checkbox.checked && nonAlcoholicDrinkIds.indexOf(drink.idDrink) > - 1)
+                    || !checkbox.checked) {
+
+                    filtered.push(drink);
+                }
+            }
+
+            if (filtered.length === 0) {
+                contentDescription.innerText = `
+                    We're sorry but we couldn't find a drink containing '${searchWord}'.
+                `;
+            }
+
             toggleView('main');
-            displayDrink(data.drinks, 'list');
+            displayDrink(filtered, 'list');
 
         })
         .catch((error) => {
@@ -102,7 +102,7 @@ const getRandomDrink = () => {
         });
 }
 
-const displayDrink = (drinks, type) => {
+const displayDrink = (drinks, type, nonAlcholicList) => {
 
     if (type === 'list') {
         drinkList.innerHTML = '';
@@ -110,7 +110,7 @@ const displayDrink = (drinks, type) => {
 
     for (const drink of drinks) {
 
-        // display when random drink
+        // display for a indvidual drink
         if (type === 'single') {
 
             toggleView('single');
@@ -165,22 +165,23 @@ const displayDrink = (drinks, type) => {
             drinkInstructionsContainer.innerHTML = drinkInstructions;
         }
 
-        // display when search
+        // display when search results is listed
         if (type === 'list') {
+
+            const drinkId = drink.idDrink;
 
             contentDescription.innerText = `Search result(s) for '${input.value}':`;
 
             const searchResult = drinkContainer.cloneNode(true);
             const imageContainerItem = searchResult.querySelector('#drink-image-container');
-            const drinkId = drink.idDrink;
 
             searchResult.addEventListener('click', () => {
                 searchForDrinkIngredients(drinkId);
             });
 
             let drinkImageList = `
-                <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
-            `;
+                    <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
+                `;
 
             imageContainerItem.innerHTML = drinkImageList;
 

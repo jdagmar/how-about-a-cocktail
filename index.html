@@ -25,16 +25,14 @@
                 <form id="search-form">
                     <div class="flex flex-col lg:flex-row">
                         <label for="input" hidden>Search for drink ingredient</label>
-                        <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1 rounded" type="text" placeholder="e.g. gin or banana"/>
+                        <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1 hover:border-grey-darker rounded" type="text" placeholder="e.g. gin or banana"/>
                         <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-1 hover:border-grey-darker rounded" type="submit" value="Search" />
                     </div>
 
                     <fieldset class="mb-4 mt-2">
-                        <legend class="mb-2">Filter search results by alcohol</legend>
-                        <label for="with-alcohol">With alcohol</label>
-                        <input id="with-alcohol" class="mr-8" type="radio" name="alcohol" value="Alcoholic" />
-                        <label for="without-alcohol">Without alcohol</label>
-                        <input id="without-alcohol" type="radio" name="alcohol" value="Non_Alcoholic" />
+                        <legend hidden class="mb-2">Filter search to exclude alcohol</legend>
+                        <label for="without-alcohol">Show only non alcohol drinks</label>
+                        <input id="without-alcohol" type="checkbox" name="alcohol" value="Non_Alcoholic" />
                     </fieldset>
                 </form>
             </div>
