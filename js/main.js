@@ -12,17 +12,61 @@ const contentDescription = document.getElementById('content-description');
 const mainView = document.getElementById('main-view');
 const singleView = document.getElementById('single-view');
 
+const toggleView = (view) => {
+
+    if (view === 'main') {
+        mainView.classList.remove('hidden');
+        singleView.classList.add('hidden');
+    }
+
+    if (view === 'single') {
+        singleView.classList.remove('hidden');
+        mainView.classList.add('hidden');
+    }
+
+}
+
+// radiobuttons
+const radioButtons = document.querySelector('alcohol');
+
+// the value of the radio goes here
+const radioButtonValue = '';
+
 const searchForDrink = (searchWord) => {
+
+    // first take the value from the inputfield
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
         .then((response) => response.json())
         .then((data) => {
 
-            // https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic
+            // check if the radio buttons is checked
+            // for (const i = 0; i < radioButtons.length; i++) {
+            //     if (radioButtons[i].checked) {
+            //         radioButtonValue = radioButtons;
+            //         break;
+            //     }
+            // }
 
-            // displaying
-            mainView.classList.remove('hidden');
-            singleView.classList.add('hidden');
+            // if one is checked, make another fetch
+            // if (radioButtonValue.checked) {
+
+            //     const filterByAlcohol = (radioButtonValue) => {
+            //         fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${alcohol}`)
+            //             .then((response) => response.json())
+            //             .then((data) => {
+
+            //                 /* then we should match the drink ids from the first
+            //                     fetch with the matching id in the second fetch */
+
+            //             })
+            //     }
+
+            // }
+
+            // display search result
+            toggleView('main');
             displayDrink(data.drinks, 'list');
+
         })
         .catch((error) => {
             contentDescription.innerText = `
@@ -69,8 +113,7 @@ const displayDrink = (drinks, type) => {
         // display when random drink
         if (type === 'single') {
 
-            mainView.classList.add('hidden');
-            singleView.classList.remove('hidden');
+            toggleView('single');
 
             const drinkTitle = singleView.querySelector('#drink-title');
             const drinkImageContainer = singleView.querySelector('#drink-image-container');
@@ -152,11 +195,6 @@ const displayDrink = (drinks, type) => {
 
 }
 
-const goBackToSearchResults = () => {
-    singleView.classList.add('hidden');
-    mainView.classList.remove('hidden');
-}
-
 searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const searchValue = input.value;
@@ -168,5 +206,5 @@ refreshButton.addEventListener('click', () => {
 });
 
 backToSearchResults.addEventListener('click', () => {
-    goBackToSearchResults();
+    toggleView('main');
 })
