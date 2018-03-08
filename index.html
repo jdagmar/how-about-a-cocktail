@@ -15,7 +15,7 @@
 
     <header class="w-full h-16 bg-indigo-darker flex items-center p-2 flex-none">
         <h1>
-            <a href="index.html" class="text-white no-underline">How about a cocktail?</a>
+            <a href="index.html" class="text-white no-underline text-2xl">How about a cocktail?</a>
         </h1>
     </header>
 
@@ -29,9 +29,9 @@
                 <form id="search-form">
                     <div class="flex flex-col lg:flex-row">
                         <label for="input" hidden>Search for drink ingredient</label>
-                        <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-1 hover:border-grey-darker rounded" type="text"
+                        <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-2 hover:border-grey-darker rounded" type="text"
                             placeholder="e.g. gin or banana" />
-                        <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-1 hover:border-grey-darker rounded" type="submit"
+                        <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-2 hover:border-grey-darker rounded" type="submit"
                             value="Search" />
                     </div>
 
@@ -78,14 +78,14 @@
                     <!-- the drinks title is rendered here -->
                 </h3>
 
-                <div class="flex">
-                    <div class="w-30">
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-30">
                         <figure id="drink-image-container" class="w-full min-height-48">
                             <!-- image of the drink is rendered here -->
                         </figure>
                     </div>
 
-                    <div class="w-full ml-4">
+                    <div class="w-full mt-4 md:ml-4 md:mt-0">
                         <h4 class="mb-2">You'll need:</h4>
                         <ul id="drink-ingredients" class="p-0">
                             <!-- the drinks ingredients are rendered here -->
