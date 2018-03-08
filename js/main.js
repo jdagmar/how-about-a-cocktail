@@ -31,16 +31,35 @@ const toggleView = (view) => {
 const searchForDrink = (searchWord) => {
 
     const fetchNonAlcoholicList = fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic`)
-        .then((response) => response.json());
+        .then(response => response.json());
 
     const fetchDrinkBySearchword = fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
-        .then((response) => response.json());
+        .then(response => response.text())
+        .then(text => {
+            if (text.length > 0) {
+                return JSON.parse(text);
+            } else {
+                return { drinks: [] };
+            }
+        });
 
-    Promise.all([fetchNonAlcoholicList, fetchDrinkBySearchword])
+    const fetchDrinkByDrinkName = fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchWord}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.drinks === null) {
+                return { drinks: [] };
+            } else {
+                return data;
+            }
+        });
 
-        .then((result) => {
-            const data = result[1];
+    Promise.all([fetchNonAlcoholicList, fetchDrinkBySearchword, fetchDrinkByDrinkName])
+
+        .then(result => {
+
             const nonAlcholicData = result[0];
+            const data = result[1];
+            const drinkNamesData = result[2];
 
             let nonAlcoholicDrinkIds = [];
 
@@ -49,12 +68,28 @@ const searchForDrink = (searchWord) => {
             }
 
             const filtered = [];
+            const filteredId = [];
 
-            for (const drink of data.drinks) {
-                if ((checkbox.checked && nonAlcoholicDrinkIds.indexOf(drink.idDrink) > - 1)
+            for (const drink of drinkNamesData.drinks) {
+
+                if ((checkbox.checked && nonAlcoholicDrinkIds.indexOf(drink.idDrink) > -1)
                     || !checkbox.checked) {
 
                     filtered.push(drink);
+                    filteredId.push(drink.idDrink);
+                }
+
+            }
+
+            for (const drink of data.drinks) {
+                if ((checkbox.checked && nonAlcoholicDrinkIds.indexOf(drink.idDrink) > -1)
+                    || !checkbox.checked) {
+
+                    if (filteredId.indexOf(drink.idDrink) === -1) {
+                        filtered.push(drink);
+                        filteredId.push(drink.idDrink);
+                    }
+
                 }
             }
 
@@ -68,9 +103,9 @@ const searchForDrink = (searchWord) => {
             displayDrink(filtered, 'list');
 
         })
-        .catch((error) => {
+        .catch(error => {
             contentDescription.innerText = `
-                We're sorry but we couldn't find a drink containing '${input.value}'.
+                We're sorry but we couldn't find a drink containing '${searchWord}'.
             `;
         });
 }
@@ -91,11 +126,11 @@ const searchForDrinkIngredients = (id) => {
 
 const getRandomDrink = () => {
     fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
-        .then((response) => response.json())
-        .then((data) => {
+        .then(response => response.json())
+        .then(data => {
             displayDrink(data.drinks, 'single');
         })
-        .catch((error) => {
+        .catch(error => {
             contentDescription.innerText = `
                 We're sorry, no recipe is aviable right now.
             `;
@@ -196,7 +231,7 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
 
 }
 
-searchForm.addEventListener('submit', (event) => {
+searchForm.addEventListener('submit', event => {
     event.preventDefault();
     const searchValue = input.value;
     searchForDrink(searchValue);
@@ -209,3 +244,6 @@ refreshButton.addEventListener('click', () => {
 backToSearchResults.addEventListener('click', () => {
     toggleView('main');
 })
+
+// getRandomDrink();
+// window.localStorage.randomDrinkData = JSON.stringify();
