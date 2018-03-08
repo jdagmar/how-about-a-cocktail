@@ -34,7 +34,16 @@ const fetchNonAlcoholicList = () => {
 }
 
 const fetchDrinkByIngredient = (searchWord) => {
-    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
+
+    const formatedSearchword = searchWord.trim().toLowerCase();
+    const localStorageKey = `searchedIngredient:${formatedSearchword}`;
+    const cachedSearchResult = localStorage.getItem(localStorageKey);
+
+    if(cachedSearchResult){
+        return Promise.resolve(JSON.parse(cachedSearchResult));
+    }
+
+    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${formatedSearchword}`)
         .then(response => response.text())
         .then(text => {
             if (text.length > 0) {
@@ -42,11 +51,25 @@ const fetchDrinkByIngredient = (searchWord) => {
             } else {
                 return { drinks: [] };
             }
-        });
+        })
+        .then(data => {
+            localStorage.setItem(localStorageKey, JSON.stringify(data));
+            return data;
+        })
+
 }
 
 const fetchDrinkByDrinkName = (searchWord) => {
-    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchWord}`)
+
+    const formatedSearchword = searchWord.trim().toLowerCase();
+    const localStorageKey = `searchedDrinkName:${formatedSearchword}`;
+    const cachedSearchResult = localStorage.getItem(localStorageKey);
+
+    if(cachedSearchResult){
+        return Promise.resolve(JSON.parse(cachedSearchResult));
+    }
+
+    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${formatedSearchword}`)
         .then(response => response.json())
         .then(data => {
             if (data.drinks === null) {
@@ -109,6 +132,8 @@ const searchForDrink = (searchWord) => {
 
         })
         .catch(error => {
+            console.error(error);
+
             contentDescription.innerText = `
                 We're sorry but we couldn't find a drink containing '${searchWord}'.
             `;
