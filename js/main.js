@@ -28,12 +28,13 @@ const toggleView = (view) => {
 
 }
 
-const searchForDrink = (searchWord) => {
-
-    const fetchNonAlcoholicList = fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic`)
+const fetchNonAlcoholicList = () => {
+    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic`)
         .then(response => response.json());
+}
 
-    const fetchDrinkBySearchword = fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
+const fetchDrinkByIngredient = (searchWord) => {
+    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchWord}`)
         .then(response => response.text())
         .then(text => {
             if (text.length > 0) {
@@ -42,8 +43,10 @@ const searchForDrink = (searchWord) => {
                 return { drinks: [] };
             }
         });
+}
 
-    const fetchDrinkByDrinkName = fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchWord}`)
+const fetchDrinkByDrinkName = (searchWord) => {
+    return fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchWord}`)
         .then(response => response.json())
         .then(data => {
             if (data.drinks === null) {
@@ -52,11 +55,13 @@ const searchForDrink = (searchWord) => {
                 return data;
             }
         });
+}
 
-    Promise.all([fetchNonAlcoholicList, fetchDrinkBySearchword, fetchDrinkByDrinkName])
+const searchForDrink = (searchWord) => {
+
+    Promise.all([fetchNonAlcoholicList(), fetchDrinkByIngredient(searchWord), fetchDrinkByDrinkName(searchWord)])
 
         .then(result => {
-
             const nonAlcholicData = result[0];
             const data = result[1];
             const drinkNamesData = result[2];
