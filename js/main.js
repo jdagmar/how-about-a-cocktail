@@ -14,6 +14,8 @@ const singleView = document.getElementById('single-view');
 
 const checkbox = document.getElementById('without-alcohol');
 
+const cacheTimeSeconds = 60 * 10;
+
 const toggleView = (view) => {
 
     if (view === 'main') {
@@ -39,8 +41,14 @@ const fetchDrinkByIngredient = (searchWord) => {
     const localStorageKey = `searchedIngredient:${formatedSearchword}`;
     const cachedSearchResult = localStorage.getItem(localStorageKey);
 
-    if(cachedSearchResult){
-        return Promise.resolve(JSON.parse(cachedSearchResult));
+    if (cachedSearchResult) {
+        
+        const data = JSON.parse(cachedSearchResult);
+
+       if ((Date.now() - data.timeStamp) / 1000 < cacheTime) {
+            return Promise.resolve(JSON.parse(cachedSearchResult));
+       }
+
     }
 
     return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${formatedSearchword}`)
@@ -53,6 +61,8 @@ const fetchDrinkByIngredient = (searchWord) => {
             }
         })
         .then(data => {
+            data.timeStamp = Date.now();
+
             localStorage.setItem(localStorageKey, JSON.stringify(data));
             return data;
         })
@@ -65,8 +75,14 @@ const fetchDrinkByDrinkName = (searchWord) => {
     const localStorageKey = `searchedDrinkName:${formatedSearchword}`;
     const cachedSearchResult = localStorage.getItem(localStorageKey);
 
-    if(cachedSearchResult){
-        return Promise.resolve(JSON.parse(cachedSearchResult));
+    if (cachedSearchResult) {
+
+        const data = JSON.parse(cachedSearchResult);
+        
+        if ((Date.now() - data.timeStamp) / 1000 < cacheTime){
+            return Promise.resolve(JSON.parse(cachedSearchResult));
+        }
+
     }
 
     return fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${formatedSearchword}`)
@@ -77,6 +93,12 @@ const fetchDrinkByDrinkName = (searchWord) => {
             } else {
                 return data;
             }
+        })
+        .then(data => {
+            data.timeStamp = Date.now();
+
+            localStorage.setItem(localStorageKey, JSON.stringify(data));
+            return data;
         });
 }
 
@@ -123,7 +145,7 @@ const searchForDrink = (searchWord) => {
 
             if (filtered.length === 0) {
                 contentDescription.innerText = `
-                    We're sorry but we couldn't find a drink containing '${searchWord}'.
+                    We're sorry but we couldn't find anything on '${searchWord}' 
                 `;
             }
 
@@ -135,7 +157,7 @@ const searchForDrink = (searchWord) => {
             console.error(error);
 
             contentDescription.innerText = `
-                We're sorry but we couldn't find a drink containing '${searchWord}'.
+                We're sorry but we couldn't find anything on '${searchWord}' 
             `;
         });
 }
