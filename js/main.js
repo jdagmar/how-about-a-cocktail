@@ -45,7 +45,7 @@ const fetchDrinkByIngredient = (searchWord) => {
         
         const data = JSON.parse(cachedSearchResult);
 
-       if ((Date.now() - data.timeStamp) / 1000 < cacheTime) {
+       if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds) {
             return Promise.resolve(JSON.parse(cachedSearchResult));
        }
 
@@ -79,7 +79,7 @@ const fetchDrinkByDrinkName = (searchWord) => {
 
         const data = JSON.parse(cachedSearchResult);
         
-        if ((Date.now() - data.timeStamp) / 1000 < cacheTime){
+        if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds){
             return Promise.resolve(JSON.parse(cachedSearchResult));
         }
 
@@ -184,7 +184,7 @@ const getRandomDrink = () => {
         })
         .catch(error => {
             contentDescription.innerText = `
-                We're sorry, no recipe is aviable right now.
+                We're sorry, no recipe is available right now.
             `;
         });
 }
@@ -296,6 +296,3 @@ refreshButton.addEventListener('click', () => {
 backToSearchResults.addEventListener('click', () => {
     toggleView('main');
 })
-
-// getRandomDrink();
-// window.localStorage.randomDrinkData = JSON.stringify();
