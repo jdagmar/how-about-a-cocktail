@@ -27,7 +27,7 @@
                     Search for a drink containing a specific liqour/ingredient or just a drink name.
                 </p>
                 <form id="search-form">
-                    <p id="invalid-input-msg" class="w-full invisible text-red">Searchfield cannot be empty</p>
+                    <p id="invalid-input-message" class="w-full invisible text-red">Searchfield cannot be empty</p>
                     <div class="flex flex-col lg:flex-row">
                         <label for="input" hidden>Search for drink ingredient</label>
                         <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-2 hover:border-grey-darker rounded" type="text"
@@ -38,26 +38,26 @@
 
                     <fieldset class="mb-4 mt-2">
                         <legend hidden class="mb-2">Filter search to exclude alcoholic drinks</legend>
-                        <label for="without-alcohol">Show only non alcoholic drinks</label>
-                        <input id="without-alcohol" type="checkbox" name="alcohol" value="Non_Alcoholic" />
+                        <label for="non-alcoholic">Show only non alcoholic drinks</label>
+                        <input id="non-alcoholic" type="checkbox" name="alcohol" value="Non_Alcoholic" />
                     </fieldset>
                 </form>
             </div>
 
-            <button id="refresh-button" class="flex justify-center items-center border border-solid w-full mt-8 p-3 hover:border-grey-darker rounded"
+            <button id="random-drink-button" class="flex justify-center items-center border border-solid w-full mt-8 p-3 hover:border-grey-darker rounded"
                 aria-label="click to get a random drink">
                 Generate random recipe
             </button>
         </aside>
 
         <main class="overflow-auto w-full">
-            <div id="main-view" class="max-w-xl">
+            <div id="list-view" class="max-w-xl">
                 <h3 id="content-description" class="m-4">
                     <!-- describes the content currently showing, eg 'search result for...' -->
                 </h3>
 
                 <div id="drink-list" class="flex flex-col md:flex-row flex-wrap">
-                    <div id="drink-div" class="m-4 md:w-32 cursor-pointer">
+                    <div id="drink-container" class="m-4 md:w-32 cursor-pointer">
                         <figure id="drink-image-container" class="w-full md:w-32 md:h-32">
                             <!-- image of the drink is rendered here -->
                         </figure>
@@ -70,7 +70,7 @@
             </div>
 
             <div id="single-view" class="max-w-md m-4 hidden">
-                <button id="back-to-search-results" class="hidden flex justify-center items-center border border-solid p-3 pr-6 mb-4 hover:border-grey-darker rounded">
+                <button id="back-to-list-button" class="hidden flex justify-center items-center border border-solid p-3 pr-6 mb-4 hover:border-grey-darker rounded">
                     <img class="hover:white" src="images/chevron-icon.svg" alt="click to go back to list" /> Back to list
                 </button>
 

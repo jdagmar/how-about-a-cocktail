@@ -1,38 +1,32 @@
 const input = document.getElementById('input');
 const searchValue = input.value;
-
+const checkbox = document.getElementById('non-alcoholic');
 const searchForm = document.getElementById('search-form');
-
-const drinkContainer = document.getElementById('drink-div');
-const drinkList = document.getElementById('drink-list');
-
-const backToSearchResults = document.getElementById('back-to-search-results');
-const refreshButton = document.getElementById('refresh-button');
+const invalidInputMessage = document.getElementById('invalid-input-message');
 
 const contentDescription = document.getElementById('content-description');
+const drinkContainer = document.getElementById('drink-container');
+const drinkList = document.getElementById('drink-list');
 
-const mainView = document.getElementById('main-view');
+const backToListButton = document.getElementById('back-to-list-button');
+const randomDrinkButton = document.getElementById('random-drink-button');
+
+const listView = document.getElementById('list-view');
 const singleView = document.getElementById('single-view');
 
-const checkbox = document.getElementById('without-alcohol');
-
-const invalidInputMsg = document.getElementById('invalid-input-msg');
-
 const cacheTimeSeconds = 60 * 10;
-
 let searchMode = false;
-
 
 const toggleView = (view) => {
 
-    if (view === 'main') {
-        mainView.classList.remove('hidden');
+    if (view === 'list') {
+        listView.classList.remove('hidden');
         singleView.classList.add('hidden');
     }
 
     if (view === 'single') {
         singleView.classList.remove('hidden');
-        mainView.classList.add('hidden');
+        listView.classList.add('hidden');
     }
 
 }
@@ -120,7 +114,7 @@ const isValidInput = (searchWord) => {
 const searchForDrink = (searchWord) => {
 
     if (!isValidInput(searchWord)) {
-        invalidInputMsg.classList.remove('invisible');
+        invalidInputMessage.classList.remove('invisible');
         return;
     }
 
@@ -170,8 +164,8 @@ const searchForDrink = (searchWord) => {
             }
 
             searchMode = true;
-            invalidInputMsg.classList.add('invisible');
-            toggleView('main');
+            invalidInputMessage.classList.add('invisible');
+            toggleView('list');
             displayDrink(filtered, 'list');
 
         })
@@ -228,10 +222,10 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
             toggleView('single');
 
             if (searchMode) {
-                backToSearchResults.classList.add('flex');
+                backToListButton.classList.add('flex');
 
             } else {
-                backToSearchResults.classList.remove('flex');
+                backToListButton.classList.remove('flex');
 
             }
 
@@ -322,10 +316,10 @@ searchForm.addEventListener('submit', event => {
     searchForDrink(searchValue);
 });
 
-refreshButton.addEventListener('click', () => {
+randomDrinkButton.addEventListener('click', () => {
     getRandomDrink();
 });
 
-backToSearchResults.addEventListener('click', () => {
-    toggleView('main');
-})
+backToListButton.addEventListener('click', () => {
+    toggleView('list');
+});
