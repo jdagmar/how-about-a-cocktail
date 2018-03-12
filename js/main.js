@@ -16,6 +16,9 @@ const checkbox = document.getElementById('without-alcohol');
 
 const cacheTimeSeconds = 60 * 10;
 
+let searchMode = false;
+
+
 const toggleView = (view) => {
 
     if (view === 'main') {
@@ -163,6 +166,9 @@ const searchForDrink = (searchWord) => {
 }
 
 const searchForDrinkIngredients = (id) => {
+
+    searchMode = true;
+
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
         .then((response) => response.json())
         .then((data) => {
@@ -201,6 +207,14 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
         if (type === 'single') {
 
             toggleView('single');
+
+            if(searchMode){
+                backToSearchResults.classList.add('flex');
+
+            } else {
+                backToSearchResults.classList.remove('flex');
+
+            }
 
             const drinkTitle = singleView.querySelector('#drink-title');
             const drinkImageContainer = singleView.querySelector('#drink-image-container');
