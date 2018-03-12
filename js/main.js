@@ -169,6 +169,7 @@ const searchForDrink = (searchWord) => {
                 `;
             }
 
+            searchMode = true;
             invalidInputMsg.classList.add('invisible');
             toggleView('main');
             displayDrink(filtered, 'list');
