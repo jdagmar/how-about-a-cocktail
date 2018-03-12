@@ -1,4 +1,6 @@
 const input = document.getElementById('input');
+const searchValue = input.value;
+
 const searchForm = document.getElementById('search-form');
 
 const drinkContainer = document.getElementById('drink-div');
@@ -13,6 +15,8 @@ const mainView = document.getElementById('main-view');
 const singleView = document.getElementById('single-view');
 
 const checkbox = document.getElementById('without-alcohol');
+
+const invalidInputMsg = document.getElementById('invalid-input-msg');
 
 const cacheTimeSeconds = 60 * 10;
 
@@ -45,12 +49,12 @@ const fetchDrinkByIngredient = (searchWord) => {
     const cachedSearchResult = localStorage.getItem(localStorageKey);
 
     if (cachedSearchResult) {
-        
+
         const data = JSON.parse(cachedSearchResult);
 
-       if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds) {
+        if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds) {
             return Promise.resolve(JSON.parse(cachedSearchResult));
-       }
+        }
 
     }
 
@@ -81,8 +85,8 @@ const fetchDrinkByDrinkName = (searchWord) => {
     if (cachedSearchResult) {
 
         const data = JSON.parse(cachedSearchResult);
-        
-        if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds){
+
+        if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds) {
             return Promise.resolve(JSON.parse(cachedSearchResult));
         }
 
@@ -105,7 +109,20 @@ const fetchDrinkByDrinkName = (searchWord) => {
         });
 }
 
+const isValidInput = (searchWord) => {
+    if (!searchWord.trim()) {
+        return false;
+    }
+
+    return true;
+}
+
 const searchForDrink = (searchWord) => {
+
+    if (!isValidInput(searchWord)) {
+        invalidInputMsg.classList.remove('invisible');
+        return;
+    }
 
     Promise.all([fetchNonAlcoholicList(), fetchDrinkByIngredient(searchWord), fetchDrinkByDrinkName(searchWord)])
 
@@ -152,6 +169,7 @@ const searchForDrink = (searchWord) => {
                 `;
             }
 
+            invalidInputMsg.classList.add('invisible');
             toggleView('main');
             displayDrink(filtered, 'list');
 
@@ -208,7 +226,7 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
 
             toggleView('single');
 
-            if(searchMode){
+            if (searchMode) {
                 backToSearchResults.classList.add('flex');
 
             } else {
