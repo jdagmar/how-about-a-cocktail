@@ -6,7 +6,7 @@ p, input {
     font-family: 'Roboto', sans-serif;
 }
 
-.min-height-48 {
+.min-height-10 {
     min-height: 10rem;
 }
 
@@ -19,7 +19,7 @@ p, input {
 }
 
 .grow {
-    transition: all .2s ease-in-out
+    transition: all .2s ease-in-out;
 }
 
 .grow:hover {
