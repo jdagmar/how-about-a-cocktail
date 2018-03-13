@@ -180,8 +180,7 @@ const searchForDrinkIngredients = (id) => {
         })
         .catch((error) => {
             contentDescription.innerText = `
-                Seems like something went wrong, we couldn't find the recipe
-                for ${data.drinks.strDrink}.
+                Could not find recipe for ${data.drinks.strDrink}.
             `;
         });
 }
