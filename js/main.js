@@ -149,7 +149,7 @@ const searchForDrink = (searchWord) => {
 
             if (filtered.length === 0) {
                 contentDescription.innerText = `
-                    We're sorry but we couldn't find anything on '${searchWord}' 
+                    Nothing found on ${searchWord}.
                 `;
             }
 
@@ -164,7 +164,7 @@ const searchForDrink = (searchWord) => {
             console.error(error);
 
             contentDescription.innerText = `
-                We're sorry but we couldn't find anything on '${searchWord}' 
+                Nothing found on ${searchWord}.
             `;
         });
 }
@@ -194,10 +194,18 @@ const getRandomDrink = () => {
         })
         .catch(error => {
             contentDescription.innerText = `
-                We're sorry, no recipe is available right now.
+                No recipe is available right now.
             `;
         });
 }
+
+// const getStartRandomDrink = () => {
+//     getRandomDrink();
+
+//     localStorage.setItem('StartDrink', JSON.stringify(data.drinks));
+// }
+
+// getStartRandomDrink();
 
 const displayDrink = (drinks, type, nonAlcholicList) => {
     if (type === 'list') {
@@ -279,7 +287,7 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
 
             const drinkId = drink.idDrink;
 
-            contentDescription.innerText = `Search result(s) for '${input.value}':`;
+            contentDescription.innerText = `Showing search result(s) for ${input.value}:`;
 
             const searchResult = drinkContainer.cloneNode(true);
             const imageContainerItem = searchResult.querySelector('#drink-image-container');
@@ -298,7 +306,6 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
             searchResultTitle.innerText = drink.strDrink;
 
             drinkList.appendChild(searchResult);
-
         }
 
     }
@@ -318,5 +325,3 @@ randomDrinkButton.addEventListener('click', () => {
 backToListButton.addEventListener('click', () => {
     toggleView('list');
 });
-
-getRandomDrink();
