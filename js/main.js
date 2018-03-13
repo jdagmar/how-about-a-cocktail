@@ -23,6 +23,7 @@ const toggleView = (view) => {
     if (view === 'list') {
         listView.classList.remove('hidden');
         singleView.classList.add('hidden');
+        contentDescription.classList.remove('hidden');
     }
 
     if (view === 'single') {
@@ -240,7 +241,7 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
                 contentDescription.innerText = `How about a ${drink.strDrink}?`;
                 drinkTitle.classList.add('hidden');
             } else {
-                contentDescription.innerText = '';
+                contentDescription.classList.add('hidden');
                 drinkTitle.classList.remove('hidden');
             }
 
@@ -291,6 +292,12 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
         // display when search results is listed
         if (type === 'list') {
 
+            toggleView('list');
+
+            if(searchMode){
+                contentDescription.classList.remove('hidden');
+            }
+
             const drinkId = drink.idDrink;
 
             contentDescription.innerText = `Search result(s) for '${input.value}':`;
@@ -299,8 +306,6 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
             const imageContainerItem = searchResult.querySelector('#drink-image-container');
 
             searchResult.addEventListener('click', () => {
-
-                contentDescription.innerText = '';
                 searchForDrinkIngredients(drinkId);
             });
 
