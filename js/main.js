@@ -16,6 +16,7 @@ const singleView = document.getElementById('single-view');
 
 const cacheTimeSeconds = 60 * 10;
 let searchMode = false;
+let randomDrinkMode = true;
 
 const toggleView = (view) => {
 
@@ -164,6 +165,7 @@ const searchForDrink = (searchWord) => {
             }
 
             searchMode = true;
+            randomDrinkMode = false;
             invalidInputMessage.classList.add('invisible');
             toggleView('list');
             displayDrink(filtered, 'list');
@@ -181,6 +183,7 @@ const searchForDrink = (searchWord) => {
 const searchForDrinkIngredients = (id) => {
 
     searchMode = true;
+    randomDrinkMode = false;
 
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
         .then((response) => response.json())
@@ -196,6 +199,7 @@ const searchForDrinkIngredients = (id) => {
 }
 
 const getRandomDrink = () => {
+
     fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
         .then(response => response.json())
         .then(data => {
@@ -219,21 +223,26 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
         // display for a indvidual drink
         if (type === 'single') {
 
+            const drinkTitle = singleView.querySelector('#drink-title');
+            const drinkImageContainer = singleView.querySelector('#drink-image-container');
+            const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
+            let drinkInfo = drink.strDrink;
+
             toggleView('single');
 
             if (searchMode) {
                 backToListButton.classList.add('flex');
-
             } else {
                 backToListButton.classList.remove('flex');
-
             }
 
-            const drinkTitle = singleView.querySelector('#drink-title');
-            const drinkImageContainer = singleView.querySelector('#drink-image-container');
-            const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
-
-            let drinkInfo = drink.strDrink;
+            if (randomDrinkMode) {
+                contentDescription.innerText = `How about a ${drink.strDrink}?`;
+                drinkTitle.classList.add('hidden');
+            } else {
+                contentDescription.innerText = '';
+                drinkTitle.classList.remove('hidden');
+            }
 
             let drinkImage = `
                 <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
@@ -290,6 +299,8 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
             const imageContainerItem = searchResult.querySelector('#drink-image-container');
 
             searchResult.addEventListener('click', () => {
+
+                contentDescription.innerText = '';
                 searchForDrinkIngredients(drinkId);
             });
 
@@ -323,3 +334,5 @@ randomDrinkButton.addEventListener('click', () => {
 backToListButton.addEventListener('click', () => {
     toggleView('list');
 });
+
+getRandomDrink();
