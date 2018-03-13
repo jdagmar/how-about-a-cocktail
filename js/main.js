@@ -19,7 +19,6 @@ let searchMode = false;
 let randomDrinkMode = true;
 
 const toggleView = (view) => {
-
     if (view === 'list') {
         listView.classList.remove('hidden');
         singleView.classList.add('hidden');
@@ -30,7 +29,6 @@ const toggleView = (view) => {
         singleView.classList.remove('hidden');
         listView.classList.add('hidden');
     }
-
 }
 
 const fetchNonAlcoholicList = () => {
@@ -39,19 +37,16 @@ const fetchNonAlcoholicList = () => {
 }
 
 const fetchDrinkByIngredient = (searchWord) => {
-
     const formatedSearchword = searchWord.trim().toLowerCase();
     const localStorageKey = `searchedIngredient:${formatedSearchword}`;
     const cachedSearchResult = localStorage.getItem(localStorageKey);
 
     if (cachedSearchResult) {
-
         const data = JSON.parse(cachedSearchResult);
 
         if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds) {
             return Promise.resolve(JSON.parse(cachedSearchResult));
         }
-
     }
 
     return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${formatedSearchword}`)
@@ -73,19 +68,16 @@ const fetchDrinkByIngredient = (searchWord) => {
 }
 
 const fetchDrinkByDrinkName = (searchWord) => {
-
     const formatedSearchword = searchWord.trim().toLowerCase();
     const localStorageKey = `searchedDrinkName:${formatedSearchword}`;
     const cachedSearchResult = localStorage.getItem(localStorageKey);
 
     if (cachedSearchResult) {
-
         const data = JSON.parse(cachedSearchResult);
 
         if ((Date.now() - data.timeStamp) / 1000 < cacheTimeSeconds) {
             return Promise.resolve(JSON.parse(cachedSearchResult));
         }
-
     }
 
     return fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${formatedSearchword}`)
@@ -114,7 +106,6 @@ const isValidInput = (searchWord) => {
 }
 
 const searchForDrink = (searchWord) => {
-
     if (!isValidInput(searchWord)) {
         invalidInputMessage.classList.remove('invisible');
         return;
@@ -137,14 +128,12 @@ const searchForDrink = (searchWord) => {
             const filteredId = [];
 
             for (const drink of drinkNamesData.drinks) {
-
                 if ((checkbox.checked && nonAlcoholicDrinkIds.indexOf(drink.idDrink) > -1)
                     || !checkbox.checked) {
 
                     filtered.push(drink);
                     filteredId.push(drink.idDrink);
                 }
-
             }
 
             for (const drink of data.drinks) {
@@ -155,7 +144,6 @@ const searchForDrink = (searchWord) => {
                         filtered.push(drink);
                         filteredId.push(drink.idDrink);
                     }
-
                 }
             }
 
@@ -182,7 +170,6 @@ const searchForDrink = (searchWord) => {
 }
 
 const searchForDrinkIngredients = (id) => {
-
     searchMode = true;
     randomDrinkMode = false;
 
@@ -200,7 +187,6 @@ const searchForDrinkIngredients = (id) => {
 }
 
 const getRandomDrink = () => {
-
     fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
         .then(response => response.json())
         .then(data => {
@@ -214,16 +200,13 @@ const getRandomDrink = () => {
 }
 
 const displayDrink = (drinks, type, nonAlcholicList) => {
-
     if (type === 'list') {
         drinkList.innerHTML = '';
     }
 
     for (const drink of drinks) {
-
         // display for a indvidual drink
         if (type === 'single') {
-
             const drinkTitle = singleView.querySelector('#drink-title');
             const drinkImageContainer = singleView.querySelector('#drink-image-container');
             const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
@@ -255,7 +238,6 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
 
             for (const drinkProperty of drinksProperties) {
                 if (drinkProperty.includes('strIngredient')) {
-
                     if (drink[drinkProperty] !== null) {
                         ingredientsArray.push(drink[drinkProperty]);
                     }
@@ -269,14 +251,12 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
             let drinkIngredients = '';
 
             for (let i = 0; i < ingredientsArray.length; i++) {
-
                 const ingredient = ingredientsArray[i];
                 const measures = measureArray[i];
 
                 drinkIngredients += `
                     <li class="list-reset mb-2">${measures} ${ingredient}</li>
                 `;
-
             }
 
             const drinkInstructionsContainer = singleView.querySelector('#drink-instructions');
@@ -291,10 +271,9 @@ const displayDrink = (drinks, type, nonAlcholicList) => {
 
         // display when search results is listed
         if (type === 'list') {
-
             toggleView('list');
 
-            if(searchMode){
+            if (searchMode) {
                 contentDescription.classList.remove('hidden');
             }
 
