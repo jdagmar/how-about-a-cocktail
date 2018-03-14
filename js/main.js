@@ -6,6 +6,7 @@ const checkbox = document.getElementById('non-alcoholic');
 const searchForm = document.getElementById('search-form');
 const invalidInputMessage = document.getElementById('invalid-input-message');
 const searchButtonText = document.getElementById('search-button-text');
+const searchButton = document.getElementById('search-button');
 
 /* content containers */
 const contentDescription = document.getElementById('content-description');
@@ -127,6 +128,7 @@ const searchForDrink = searchWord => {
 
     invalidInputMessage.classList.add('invisible');
     loadingSpinner.classList.remove('hidden');
+    searchButton.setAttribute('disabled', 'disabled');
     searchButtonText.classList.add('hidden');
 
     // if all promises are resolved we continue
@@ -137,9 +139,9 @@ const searchForDrink = searchWord => {
     ])
         .then(result => {
             const nonAlcholicData = result[0];
-            const data = result[1];
+            const drinkIngredientsData = result[1];
             const drinkNamesData = result[2];
-            let nonAlcoholicDrinkIds = [];
+            const nonAlcoholicDrinkIds = [];
 
             // saving all id's of the non-alcoholic drinks
             for (const drink of nonAlcholicData.drinks) {
@@ -163,7 +165,7 @@ const searchForDrink = searchWord => {
             }
 
             // checks if theres a match in the drinkingredientlist
-            for (const drink of data.drinks) {
+            for (const drink of drinkIngredientsData.drinks) {
                 if ((checkbox.checked && nonAlcoholicDrinkIds.indexOf(drink.idDrink) > -1)
                     || !checkbox.checked) {
 
@@ -184,12 +186,14 @@ const searchForDrink = searchWord => {
             searchMode = true;
             randomDrinkMode = false;
             loadingSpinner.classList.add('hidden');
+            searchButton.removeAttribute('disabled', 'disabled');
             searchButtonText.classList.remove('hidden');
             displayDrink(filtered, 'list');
         })
         .catch(error => {
             console.error(error);
             loadingSpinner.classList.add('hidden');
+            searchButton.removeAttribute('disabled', 'disabled');
             searchButtonText.classList.remove('hidden');
             contentDescription.innerText = 'Something went wrong, try again.';
         });
@@ -302,7 +306,6 @@ const displayDrink = (drinks, type) => {
             toggleView('list');
 
             if (searchMode) {
-                contentDescription.classList.remove('hidden');
             }
 
             contentDescription.innerText = `Showing search result(s) for ${input.value}:`;
