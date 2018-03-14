@@ -18,10 +18,13 @@ p, input {
     width: 30rem;
 }
 
-.grow {
+@media (min-width: 900px){
+    .grow {
     transition: all .2s ease-in-out;
+    }   
+
+    .grow:hover {
+    transform: scale(1.2);
+    }
 }
 
-.grow:hover {
-    transform: scale(1.2);
-}
