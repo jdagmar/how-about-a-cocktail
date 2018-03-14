@@ -39,6 +39,18 @@ const toggleView = view => {
     }
 }
 
+const showLoadingSpinner = () => {
+	loadingSpinner.classList.remove('hidden');
+    searchButton.setAttribute('disabled', 'disabled');
+    searchButtonText.classList.add('hidden');
+}
+
+const hideLoadingSpinner = () => {
+	loadingSpinner.classList.add('hidden');
+    searchButton.removeAttribute('disabled', 'disabled');
+    searchButtonText.classList.remove('hidden');
+}
+
 const fetchNonAlcoholicList = () => {
     return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic`)
         .then(response => response.json());
@@ -127,9 +139,7 @@ const searchForDrink = searchWord => {
     }
 
     invalidInputMessage.classList.add('invisible');
-    loadingSpinner.classList.remove('hidden');
-    searchButton.setAttribute('disabled', 'disabled');
-    searchButtonText.classList.add('hidden');
+    showLoadingSpinner();
 
     // if all promises are resolved we continue
     Promise.all([
@@ -185,16 +195,12 @@ const searchForDrink = searchWord => {
 
             searchMode = true;
             randomDrinkMode = false;
-            loadingSpinner.classList.add('hidden');
-            searchButton.removeAttribute('disabled', 'disabled');
-            searchButtonText.classList.remove('hidden');
+            hideLoadingSpinner();
             displayDrink(filtered, 'list');
         })
         .catch(error => {
             console.error(error);
-            loadingSpinner.classList.add('hidden');
-            searchButton.removeAttribute('disabled', 'disabled');
-            searchButtonText.classList.remove('hidden');
+            hideLoadingSpinner();
             contentDescription.innerText = 'Something went wrong, try again.';
         });
 }
