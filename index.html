@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:400,600|Roboto:400,400i,500" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet" />
+    <link href="css/spinkit.css" rel="stylesheet" />
     <title>How about a cocktail?</title>
 </head>
 
@@ -32,8 +33,23 @@
                         <label for="input" hidden>Search for drink ingredient</label>
                         <input id="input" class="w-full lg:w-3/4 border border-solid mb-2 mr-1 p-2 hover:border-grey-darker rounded" type="text"
                             placeholder="e.g. gin, banana or tom collins" />
-                        <input class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-2 hover:border-grey-darker rounded" type="submit"
-                            value="Search" />
+                        <button class="appearance-none border border-solid w-full lg:w-1/4 mb-2 p-2 hover:border-grey-darker rounded" type="submit">
+                            <span id="search-button-text">Search</span>
+                            <div id="loading-spinner" class="sk-circle hidden">
+                                <div class="sk-circle1 sk-child"></div>
+                                <div class="sk-circle2 sk-child"></div>
+                                <div class="sk-circle3 sk-child"></div>
+                                <div class="sk-circle4 sk-child"></div>
+                                <div class="sk-circle5 sk-child"></div>
+                                <div class="sk-circle6 sk-child"></div>
+                                <div class="sk-circle7 sk-child"></div>
+                                <div class="sk-circle8 sk-child"></div>
+                                <div class="sk-circle9 sk-child"></div>
+                                <div class="sk-circle10 sk-child"></div>
+                                <div class="sk-circle11 sk-child"></div>
+                                <div class="sk-circle12 sk-child"></div>
+                            </div>
+                        </button>
                     </div>
 
                     <fieldset class="mb-4 mt-2">
@@ -50,18 +66,19 @@
             </button>
         </aside>
 
-        <main class="overflow-auto w-full">
+        <main class="overflow-auto w-full relative">
             <h3 id="content-description" class="m-4">
                 <!-- describes the content currently showing, eg 'search result for...' -->
             </h3>
+
             <div id="list-view" class="max-w-xl">
                 <div id="drink-list" class="flex flex-col md:flex-row flex-wrap">
                     <div id="drink-container" class="m-4 md:w-32 cursor-pointer grow">
-                        <figure id="drink-image-container" class="w-full md:w-32 md:h-32">
+                        <figure class="w-full md:w-32 md:h-32 drink-image-container">
                             <!-- image of the drink is rendered here -->
                         </figure>
 
-                        <h3 id="drink-title" class="mb-2 mt-2 drink-title">
+                        <h3 class="mb-2 mt-2 drink-title">
                             <!-- the drinks title is rendered here -->
                         </h3>
                     </div>
@@ -69,7 +86,7 @@
 
                 <div id="anchor" class="lg:hidden text-center mb-2">
                     <a href="#">
-                        <img class="w-8" src="images/chevron-up-icon.svg" alt="click to go to top of page"/>
+                        <img class="w-8" src="images/chevron-up-icon.svg" alt="click to go to top of page" />
                     </a>
                 </div>
             </div>
@@ -79,13 +96,13 @@
                     <img class="hover:white" src="images/chevron-icon.svg" alt="click to go back to search result" /> Back to search results
                 </button>
 
-                <h3 id="drink-title" class="mb-2 drink-title">
+                <h3 class="mb-2 drink-title">
                     <!-- the drinks title is rendered here -->
                 </h3>
 
                 <div class="flex flex-col md:flex-row">
                     <div class="md:w-30">
-                        <figure id="drink-image-container" class="w-full min-height-10">
+                        <figure class="w-full min-height-10 drink-image-container">
                             <!-- image of the drink is rendered here -->
                         </figure>
                     </div>
