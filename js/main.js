@@ -200,19 +200,12 @@ const searchForDrink = searchWord => {
                 }
             }
 
-            /* for some reason the catch on line 177 wont catch if searchresult is empty
-            so its caught here instead */
-            if (filtered.length === 0) {
-                contentDescription.innerText = `Nothing found on ${searchWord}.`;
-            }
-
             searchMode = true;
             randomDrinkMode = false;
             hideLoadingSpinnerSearch();
-            displayDrinksAsList(filtered);
+            displayDrinksAsList(filtered, searchWord);
         })
         .catch(error => {
-            console.error(error);
             hideLoadingSpinnerSearch();
             contentDescription.innerText = 'Something went wrong, try again.';
         });
@@ -230,7 +223,6 @@ const getDrink = id => {
             displaySingleDrink(data.drinks);
         })
         .catch(error => {
-            console.error(error);
             contentDescription.innerText = 'Something went wrong, try again.';
         });
 }
@@ -244,7 +236,6 @@ const getRandomDrink = () => {
             displaySingleDrink(data.drinks);
         })
         .catch(error => {
-            console.error(error);
             hideLoadingSpinnerRandom();
             contentDescription.innerText = 'Something went wrong, try again.';
         });
@@ -315,9 +306,15 @@ const displaySingleDrink = drinks => {
     }
 }
 
-const displayDrinksAsList = drinks => {
+const displayDrinksAsList = (drinks, searchWord) => {
+
+    if (drinks.length === 0) {
+        contentDescription.innerText = `Nothing found on ${searchWord}.`;
+    } else {
+        contentDescription.innerText = `Showing search result(s) for ${searchWord}:`;
+    }
+    
     drinkList.innerHTML = '';
-    contentDescription.innerText = `Showing search result(s) for ${input.value}:`;
 
     for (const drink of drinks) {
         const drinkId = drink.idDrink;
