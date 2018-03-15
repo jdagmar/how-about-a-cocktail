@@ -12,7 +12,7 @@ How about a cocktail? is a application where you get cocktail suggestions and se
 * [Tailwind CSS](https://tailwindcss.com/)
 * JavaScript
 
-## Resources
+### Resources
 I've used theCocktailDB's API which is an open database with cocktail recipes including images and information on ingredients used. [See API here](https://www.thecocktaildb.com/).
 
 ## Workflow
