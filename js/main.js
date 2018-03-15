@@ -8,7 +8,7 @@ const searchButtonText = document.getElementById('search-button-text');
 const searchButton = document.getElementById('search-button');
 const randomButtonText = document.getElementById('random-drink-button-text');
 const loadingSpinnerRandom = document.getElementById('loading-spinner--random');
-const loadingSpinnerSearch = document.getElementById('loading-spinner');
+const loadingSpinnerSearch = document.getElementById('loading-spinner--search');
 
 /* content containers */
 const contentDescription = document.getElementById('content-description');
@@ -335,7 +335,7 @@ const displayDrinksAsList = drinks => {
         searchResultTitle.innerText = drink.strDrink;
         drinkList.appendChild(searchResult);
     }
-    
+
     displayDrinkListView();
 }
 
