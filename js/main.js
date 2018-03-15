@@ -21,23 +21,23 @@ const singleView = document.getElementById('single-view');
 const backToListButton = document.getElementById('back-to-list-button');
 const randomDrinkButton = document.getElementById('random-drink-button');
 
-/* states */
+/* control variables */
 const cacheTimeSeconds = 60 * 10;
+/* before user has searched searchmode is false and drinkmode is true
+this pretty much controls how the content is displayed (see displaySingleDrink) */
 let searchMode = false;
 let randomDrinkMode = true;
 
+/* display/shows the 2 different containers in order to simulate switching pages */
+const displayDrinkListView = () => {
+    listView.classList.remove('hidden');
+    singleView.classList.add('hidden');
+    contentDescription.classList.remove('hidden');
+}
 
-/* simulates the feeling of switching between pages */
-const toggleView = view => {
-    if (view === 'list') {
-        listView.classList.remove('hidden');
-        singleView.classList.add('hidden');
-        contentDescription.classList.remove('hidden');
-    }
-    if (view === 'single') {
-        singleView.classList.remove('hidden');
-        listView.classList.add('hidden');
-    }
+const displaySingleDrinkView = () => {
+    singleView.classList.remove('hidden');
+    listView.classList.add('hidden');
 }
 
 const showLoadingSpinnerSearch = () => {
@@ -70,17 +70,17 @@ const fetchNonAlcoholicList = () => {
 }
 
 const fetchDrinkByIngredient = searchWord => {
-    // controls that for example GIN and gin only results in one cache
+    // formats searchinput so for example GIN and gin only results in one cache
     const formatedSearchword = searchWord.trim().toLowerCase();
     const localStorageKey = `searchedIngredient:${formatedSearchword}`;
     const cachedSearchResult = localStorage.getItem(localStorageKey);
 
-    // if theres cached information use that instead of fetching 
+    // if the searchresults already exists in localstorage use that
     if (cachedSearchResult) {
         const data = JSON.parse(cachedSearchResult);
-
         const secondsSinceCached = (Date.now() - data.timeStamp) / 1000;
-        // if our cache is less than 10 minutes old return solved promise 
+        /* if our cache is less than 10 minutes old return solved promise 
+        otherwise make a new get request */
         if (secondsSinceCached < cacheTimeSeconds) {
             return Promise.resolve(JSON.parse(cachedSearchResult));
         }
@@ -89,8 +89,9 @@ const fetchDrinkByIngredient = searchWord => {
     return fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${formatedSearchword}`)
         .then(response => response.text())
         .then(text => {
-            /* if user searches for a drink this fetch won't resolve since theres no ingredient 
-            named eg. tom collins, so if this is the case we return empty drinks so we can continue */
+            /* if user searches for a drink name e.g. tom collins this fetch wont return anything
+            i.e. this promise wont resolve and searchfunction wont complete. so if this occur an
+            empty array so promise gets resolved.  */
             if (text.length > 0) {
                 return JSON.parse(text);
             } else {
@@ -98,13 +99,14 @@ const fetchDrinkByIngredient = searchWord => {
             }
         })
         .then(data => {
-            // to control how long cached result is saved current date is sent in
+            // to be able to control how long we save data in localstorage current time is saved here
             data.timeStamp = Date.now();
             localStorage.setItem(localStorageKey, JSON.stringify(data));
             return data;
         });
 }
 
+/* see comments on fetchDrinkByIngredient, they work the same way */
 const fetchDrinkByDrinkName = searchWord => {
     const formatedSearchword = searchWord.trim().toLowerCase();
     const localStorageKey = `searchedDrinkName:${formatedSearchword}`;
@@ -112,9 +114,7 @@ const fetchDrinkByDrinkName = searchWord => {
 
     if (cachedSearchResult) {
         const data = JSON.parse(cachedSearchResult);
-
         const secondsSinceCached = (Date.now() - data.timeStamp) / 1000;
-        // if our cache is less than 10 minutes old return solved promise 
         if (secondsSinceCached < cacheTimeSeconds) {
             return Promise.resolve(JSON.parse(cachedSearchResult));
         }
@@ -136,7 +136,7 @@ const fetchDrinkByDrinkName = searchWord => {
         });
 }
 
-/* check if user input doest not just contains blank spaces */
+/* checks if user just types blank spaces in searchfield */
 const isValidInput = searchWord => {
     if (!searchWord.trim()) {
         return false;
@@ -151,6 +151,7 @@ const searchForDrink = searchWord => {
         return;
     }
 
+    // hide error message and show loadingspinner
     invalidInputMessage.classList.add('invisible');
     showLoadingSpinnerSearch();
 
@@ -199,7 +200,8 @@ const searchForDrink = searchWord => {
                 }
             }
 
-            // for some reason the catch on line 177 wont work its controlled here
+            /* for some reason the catch on line 177 wont catch if searchresult is empty
+            so its caught here instead */
             if (filtered.length === 0) {
                 contentDescription.innerText = `Nothing found on ${searchWord}.`;
             }
@@ -216,8 +218,8 @@ const searchForDrink = searchWord => {
         });
 }
 
-/* when searching for ingredient/name the recipe/instructions isn't included in
-the returned object so another fetch is made here */
+/* the other get requests made does not return info like recipe and instructions
+therefore another request is needed */
 const getDrink = id => {
     searchMode = true;
     randomDrinkMode = false;
@@ -249,21 +251,21 @@ const getRandomDrink = () => {
 }
 
 const displaySingleDrink = drinks => {
+    displaySingleDrinkView();
     for (const drink of drinks) {
         const drinkTitle = singleView.querySelector('.drink-title');
 
-        toggleView('single');
-
-        // if user has used the searchfield a 'back to search list' button is displayed
+        /* if user has used the searchfield a 'back to search list' button is displayed 
+        above the recipe */
         if (searchMode) {
-            // since flex is has higher specificity in tailwind we need to toggle flex instead
+            // since flex is has higher specificity in tailwind flex is toggled instead
             backToListButton.classList.add('flex');
         } else {
             backToListButton.classList.remove('flex');
         }
 
-        /* if user has used the searchfield but only used 'random drink button' 
-        the drink title is instead used as a part of a headline */
+        /* if user only uses 'random drink button' the drink title is instead used as a 
+        part of a headline */
         if (randomDrinkMode) {
             contentDescription.innerText = `How about a ${drink.strDrink}?`;
             drinkTitle.classList.add('hidden');
@@ -278,8 +280,8 @@ const displaySingleDrink = drinks => {
         const ingredientsArray = [];
         const drinksProperties = Object.keys(drink);
 
-        /* the json object does not return a array with all ingredients/measures so
-        its manually done here */
+        /* the object returned from getDrink does not collect ingredients and measurements
+        in arrays so its manually done here */
         for (const drinkProperty of drinksProperties) {
             if (drinkProperty.includes('strIngredient')) {
                 ingredientsArray.push(drink[drinkProperty]);
@@ -290,6 +292,7 @@ const displaySingleDrink = drinks => {
 
         let drinkIngredients = '';
 
+        // when put into arrays they are structured for display
         for (let i = 0; i < ingredientsArray.length; i++) {
             const ingredient = ingredientsArray[i];
             const measures = measureArray[i];
@@ -304,7 +307,7 @@ const displaySingleDrink = drinks => {
         const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
         const drinkInstructions = drink.strInstructions;
         const drinkInfo = drink.strDrink;
-        
+
         drinkImageContainer.innerHTML = drinkImage;
         drinkIngredientsContainer.innerHTML = drinkIngredients;
         drinkInstructionsContainer.innerHTML = drinkInstructions;
@@ -313,9 +316,7 @@ const displaySingleDrink = drinks => {
 }
 
 const displayDrinksAsList = drinks => {
-
     drinkList.innerHTML = '';
-
     contentDescription.innerText = `Showing search result(s) for ${input.value}:`;
 
     for (const drink of drinks) {
@@ -323,21 +324,19 @@ const displayDrinksAsList = drinks => {
         const searchResult = drinkContainer.cloneNode(true);
         const imageContainerItem = searchResult.querySelector('.drink-image-container');
 
-        // each listitem becomes clickable and when clicked the full recipe is fetched
+        // each listitem becomes clickable and when clicked getDrink is executed
         searchResult.addEventListener('click', () => {
             getDrink(drinkId);
         });
 
         const drinkImageList = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
         imageContainerItem.innerHTML = drinkImageList;
-
         const searchResultTitle = searchResult.querySelector('.drink-title');
         searchResultTitle.innerText = drink.strDrink;
-
         drinkList.appendChild(searchResult);
     }
-
-    toggleView('list');
+    
+    displayDrinkListView();
 }
 
 searchForm.addEventListener('submit', event => {
@@ -351,7 +350,7 @@ randomDrinkButton.addEventListener('click', () => {
 });
 
 backToListButton.addEventListener('click', () => {
-    toggleView('list');
+    displayDrinkListView();
 });
 
 getRandomDrink();
