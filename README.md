@@ -3,10 +3,10 @@ Jessica Gustavsson
 
 ## Links
 * [Test the application here](https://jdagmar.github.io/how-about-a-cocktail/)
-* [See repo here](https://github.com/jdagmar/how-about-a-cocktail)
+* [See github repo here](https://github.com/jdagmar/how-about-a-cocktail)
 
 ## About 
-How about a cocktail? is a application where you either get a cocktail at random or search for a cocktail by ingredient or drink name.
+How about a cocktail? is a application where you get cocktail suggestions and search for cocktails based on ingredient, drink name and wether you want non-alcoholic or both.
 
 ## Building tools
 * [Tailwind CSS](https://tailwindcss.com/)
@@ -17,4 +17,11 @@ All recipes and images are provided by theCocktailDB's API.
 [See API here](https://www.thecocktaildb.com/).
 
 ## Workflow
-Nothing here yet.
+Firstly i implemented the function to get random drinks. Then I continued with the searchfunction.
+First i made sure user could search for drink by ingredient, then by name and lastly implemented the checkbox so user could filter by non-alcoholic.
+
+## Improvements
+If possible I would like to...
+* Find a way to only fetch images that are 300x300 instead of 700x700.
+* Make sure that users who navigate by keyboard will be able to write in inputfield, check the checkbox and then back to submit button smoothly.
+* Save the scroll position so when user clicks a drink in listview and then back the scrollpostion remains the same.
