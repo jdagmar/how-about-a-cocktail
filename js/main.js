@@ -1,4 +1,3 @@
-
 /* form elements */
 const input = document.getElementById('input');
 const searchValue = input.value;
@@ -7,6 +6,9 @@ const searchForm = document.getElementById('search-form');
 const invalidInputMessage = document.getElementById('invalid-input-message');
 const searchButtonText = document.getElementById('search-button-text');
 const searchButton = document.getElementById('search-button');
+const randomButtonText = document.getElementById('random-drink-button-text');
+const loadingSpinnerRandom = document.getElementById('loading-spinner--random');
+const loadingSpinnerSearch = document.getElementById('loading-spinner');
 
 /* content containers */
 const contentDescription = document.getElementById('content-description');
@@ -24,7 +26,6 @@ const cacheTimeSeconds = 60 * 10;
 let searchMode = false;
 let randomDrinkMode = true;
 
-const loadingSpinner = document.getElementById('loading-spinner');
 
 /* simulates the feeling of switching between pages */
 const toggleView = view => {
@@ -39,16 +40,28 @@ const toggleView = view => {
     }
 }
 
-const showLoadingSpinner = () => {
-	loadingSpinner.classList.remove('hidden');
+const showLoadingSpinnerSearch = () => {
+    loadingSpinnerSearch.classList.remove('hidden');
     searchButton.setAttribute('disabled', 'disabled');
     searchButtonText.classList.add('hidden');
 }
 
-const hideLoadingSpinner = () => {
-	loadingSpinner.classList.add('hidden');
+const hideLoadingSpinnerSearch = () => {
+    loadingSpinnerSearch.classList.add('hidden');
     searchButton.removeAttribute('disabled', 'disabled');
     searchButtonText.classList.remove('hidden');
+}
+
+const showLoadingSpinnerRandom = () => {
+    loadingSpinnerRandom.classList.remove('hidden');
+    randomDrinkButton.setAttribute('disabled', 'disabled');
+    randomButtonText.classList.add('hidden');
+}
+
+const hideLoadingSpinnerRandom = () => {
+    loadingSpinnerRandom.classList.add('hidden');
+    randomDrinkButton.removeAttribute('disabled', 'disabled');
+    randomButtonText.classList.remove('hidden');
 }
 
 const fetchNonAlcoholicList = () => {
@@ -139,7 +152,7 @@ const searchForDrink = searchWord => {
     }
 
     invalidInputMessage.classList.add('invisible');
-    showLoadingSpinner();
+    showLoadingSpinnerSearch();
 
     // if all promises are resolved we continue
     Promise.all([
@@ -188,19 +201,17 @@ const searchForDrink = searchWord => {
 
             // for some reason the catch on line 177 wont work its controlled here
             if (filtered.length === 0) {
-                contentDescription.innerText = `
-                    Nothing found on ${searchWord}.
-                `;
+                contentDescription.innerText = `Nothing found on ${searchWord}.`;
             }
 
             searchMode = true;
             randomDrinkMode = false;
-            hideLoadingSpinner();
-            displayDrink(filtered, 'list');
+            hideLoadingSpinnerSearch();
+            displayDrinksAsList(filtered);
         })
         .catch(error => {
             console.error(error);
-            hideLoadingSpinner();
+            hideLoadingSpinnerSearch();
             contentDescription.innerText = 'Something went wrong, try again.';
         });
 }
@@ -214,7 +225,7 @@ const getDrink = id => {
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
         .then(response => response.json())
         .then(data => {
-            displayDrink(data.drinks, 'single');
+            displaySingleDrink(data.drinks);
         })
         .catch(error => {
             console.error(error);
@@ -223,122 +234,110 @@ const getDrink = id => {
 }
 
 const getRandomDrink = () => {
+    showLoadingSpinnerRandom();
     fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
         .then(response => response.json())
         .then(data => {
-            displayDrink(data.drinks, 'single');
+            hideLoadingSpinnerRandom();
+            displaySingleDrink(data.drinks);
         })
         .catch(error => {
             console.error(error);
+            hideLoadingSpinnerRandom();
             contentDescription.innerText = 'Something went wrong, try again.';
         });
 }
 
-const displayDrink = (drinks, type) => {
-    if (type === 'list') {
-        drinkList.innerHTML = '';
+const displaySingleDrink = drinks => {
+    for (const drink of drinks) {
+        const drinkTitle = singleView.querySelector('.drink-title');
+
+        toggleView('single');
+
+        // if user has used the searchfield a 'back to search list' button is displayed
+        if (searchMode) {
+            // since flex is has higher specificity in tailwind we need to toggle flex instead
+            backToListButton.classList.add('flex');
+        } else {
+            backToListButton.classList.remove('flex');
+        }
+
+        /* if user has used the searchfield but only used 'random drink button' 
+        the drink title is instead used as a part of a headline */
+        if (randomDrinkMode) {
+            contentDescription.innerText = `How about a ${drink.strDrink}?`;
+            drinkTitle.classList.add('hidden');
+        } else {
+            contentDescription.classList.add('hidden');
+            drinkTitle.classList.remove('hidden');
+        }
+
+        const drinkImage = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
+
+        const measureArray = [];
+        const ingredientsArray = [];
+        const drinksProperties = Object.keys(drink);
+
+        /* the json object does not return a array with all ingredients/measures so
+        its manually done here */
+        for (const drinkProperty of drinksProperties) {
+            if (drinkProperty.includes('strIngredient')) {
+                ingredientsArray.push(drink[drinkProperty]);
+            } else if (drinkProperty.includes('strMeasure')) {
+                measureArray.push(drink[drinkProperty]);
+            }
+        }
+
+        let drinkIngredients = '';
+
+        for (let i = 0; i < ingredientsArray.length; i++) {
+            const ingredient = ingredientsArray[i];
+            const measures = measureArray[i];
+
+            if (ingredient && ingredient.trim()) {
+                drinkIngredients += `<li class="list-reset mb-2">${measures} ${ingredient}</li>`;
+            }
+        }
+
+        const drinkInstructionsContainer = singleView.querySelector('#drink-instructions');
+        const drinkImageContainer = singleView.querySelector('.drink-image-container');
+        const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
+        const drinkInstructions = drink.strInstructions;
+        const drinkInfo = drink.strDrink;
+        
+        drinkImageContainer.innerHTML = drinkImage;
+        drinkIngredientsContainer.innerHTML = drinkIngredients;
+        drinkInstructionsContainer.innerHTML = drinkInstructions;
+        drinkTitle.innerHTML = drinkInfo;
     }
+}
+
+const displayDrinksAsList = drinks => {
+
+    drinkList.innerHTML = '';
+
+    contentDescription.innerText = `Showing search result(s) for ${input.value}:`;
 
     for (const drink of drinks) {
-        // display for a indvidual drink
-        if (type === 'single') {
-            const drinkTitle = singleView.querySelector('.drink-title');
+        const drinkId = drink.idDrink;
+        const searchResult = drinkContainer.cloneNode(true);
+        const imageContainerItem = searchResult.querySelector('.drink-image-container');
 
-            toggleView('single');
+        // each listitem becomes clickable and when clicked the full recipe is fetched
+        searchResult.addEventListener('click', () => {
+            getDrink(drinkId);
+        });
 
-            // if user has used the searchfield a 'back to search list' button is displayed
-            if (searchMode) {
-                // since flex is has higher specificity in tailwind we need to toggle flex instead
-                backToListButton.classList.add('flex');
-            } else {
-                backToListButton.classList.remove('flex');
-            }
+        const drinkImageList = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
+        imageContainerItem.innerHTML = drinkImageList;
 
-            /* if user has used the searchfield but only used 'random drink button' 
-            the drink title is instead used as a part of a headline */
-            if (randomDrinkMode) {
-                contentDescription.innerText = `How about a ${drink.strDrink}?`;
-                drinkTitle.classList.add('hidden');
-            } else {
-                contentDescription.classList.add('hidden');
-                drinkTitle.classList.remove('hidden');
-            }
+        const searchResultTitle = searchResult.querySelector('.drink-title');
+        searchResultTitle.innerText = drink.strDrink;
 
-            const drinkImage = `
-                <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
-            `;
-
-            const measureArray = [];
-            const ingredientsArray = [];
-            const drinksProperties = Object.keys(drink);
-
-            /* the json object does not return a array with all ingredients/measures so
-            its manually done here */
-            for (const drinkProperty of drinksProperties) {
-                if (drinkProperty.includes('strIngredient')) {
-                    ingredientsArray.push(drink[drinkProperty]);
-                } else if (drinkProperty.includes('strMeasure')) {
-                    measureArray.push(drink[drinkProperty]);
-                }
-            }
-
-            let drinkIngredients = '';
-
-            for (let i = 0; i < ingredientsArray.length; i++) {
-                const ingredient = ingredientsArray[i];
-                const measures = measureArray[i];
-
-                if (ingredient && ingredient.trim()) {
-                    drinkIngredients += `
-                        <li class="list-reset mb-2">${measures} ${ingredient}</li>
-                    `;
-                }
-            }
-
-            const drinkInstructionsContainer = singleView.querySelector('#drink-instructions');
-            const drinkImageContainer = singleView.querySelector('.drink-image-container');
-            const drinkIngredientsContainer = singleView.querySelector('#drink-ingredients');
-            const drinkInstructions = drink.strInstructions;
-            const drinkInfo = drink.strDrink;
-
-            drinkTitle.innerHTML = drinkInfo;
-            drinkImageContainer.innerHTML = drinkImage;
-            drinkIngredientsContainer.innerHTML = drinkIngredients;
-            drinkInstructionsContainer.innerHTML = drinkInstructions;
-        }
-
-        // display when search results is listed
-        if (type === 'list') {
-            toggleView('list');
-
-            if (searchMode) {
-            }
-
-            contentDescription.innerText = `Showing search result(s) for ${input.value}:`;
-
-            const drinkId = drink.idDrink;
-            const searchResult = drinkContainer.cloneNode(true);
-            const imageContainerItem = searchResult.querySelector('.drink-image-container');
-
-            // each listitem becomes clickable and when clicked the full recipe is fetched
-            searchResult.addEventListener('click', () => {
-                getDrink(drinkId);
-            });
-
-            const drinkImageList = `
-                    <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>
-                `;
-
-            imageContainerItem.innerHTML = drinkImageList;
-
-            const searchResultTitle = searchResult.querySelector('.drink-title');
-            searchResultTitle.innerText = drink.strDrink;
-
-            drinkList.appendChild(searchResult);
-        }
-
+        drinkList.appendChild(searchResult);
     }
 
+    toggleView('list');
 }
 
 searchForm.addEventListener('submit', event => {
