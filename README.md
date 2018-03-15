@@ -1,5 +1,5 @@
 # How about a cocktail?
-Jessica Gustavsson
+made by Jessica Gustavsson
 
 ## Links
 * [Test the application here](https://jdagmar.github.io/how-about-a-cocktail/)
@@ -13,14 +13,13 @@ How about a cocktail? is a application where you get cocktail suggestions and se
 * JavaScript
 
 ## Resources
-All recipes and images are provided by theCocktailDB's API.
-[See API here](https://www.thecocktaildb.com/).
+I've used theCocktailDB's API which is an open database with cocktail recipes including images and information on ingredients used. [See API here](https://www.thecocktaildb.com/).
 
 ## Workflow
 Firstly i implemented the function to get random drinks. Then I continued with the searchfunction.
 First i made sure user could search for drink by ingredient, then by name and lastly implemented the checkbox so user could filter by non-alcoholic.
 
-## Improvements
+### Improvements
 If possible I would like to...
 * Find a way to only fetch images that are 300x300 instead of 700x700.
 * Make sure that users who navigate by keyboard will be able to write in inputfield, check the checkbox and then back to submit button smoothly.
