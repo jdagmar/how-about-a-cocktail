@@ -23,4 +23,5 @@ First i made sure user could search for drink by ingredient, then by name and la
 If possible I would like to...
 * Find a way to only fetch images that are 300x300 instead of 700x700.
 * Make sure that users who navigate by keyboard will be able to write in inputfield, check the checkbox and then back to submit button smoothly.
+* Make sure that the search results (image gallery) can be accessed with keyboard.
 * Save the scroll position so when user clicks a drink in listview and then back the scrollpostion remains the same.
