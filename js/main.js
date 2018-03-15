@@ -274,7 +274,7 @@ const displaySingleDrink = drinks => {
             drinkTitle.classList.remove('hidden');
         }
 
-        const drinkImage = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
+        const drinkImage = `<img class="rounded" src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
 
         const measureArray = [];
         const ingredientsArray = [];
@@ -329,7 +329,7 @@ const displayDrinksAsList = drinks => {
             getDrink(drinkId);
         });
 
-        const drinkImageList = `<img src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
+        const drinkImageList = `<img class="rounded" src="${drink.strDrinkThumb}" alt="${drink.strDrink}"/>`;
         imageContainerItem.innerHTML = drinkImageList;
         const searchResultTitle = searchResult.querySelector('.drink-title');
         searchResultTitle.innerText = drink.strDrink;
